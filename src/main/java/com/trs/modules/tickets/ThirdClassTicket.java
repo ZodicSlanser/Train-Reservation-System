@@ -1,6 +1,6 @@
 package com.trs.modules.tickets;
 
-import com.trs.modules.tickets.Ticket;
+
 
 public class ThirdClassTicket extends Ticket {
     @Override
