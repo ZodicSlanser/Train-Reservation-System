@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 public class SecondClasssTicket extends Ticket {
 
     public SecondClasssTicket(String number, int fare, String TrainNumber, LocalDateTime reservationDate) {
-        super(number, fare, TrainNumber, reservationDate);
-        fare = fare * 2;
+        super(number, fare * 2, TrainNumber, reservationDate);
     }
 
     @Override

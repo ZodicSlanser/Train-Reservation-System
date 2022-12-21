@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketManager extends CRUDS {
-    private final static List<String> TICKET_COLUMNS = List.of("number", "fare", "Number", "reservationDate");
+    private final static List<String> TICKET_COLUMNS = List.of("number", "fare", "Number", "reservationDate","class");
 
     TicketManager() {
         super();
