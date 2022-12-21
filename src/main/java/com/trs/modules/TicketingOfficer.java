@@ -11,7 +11,9 @@ public class TicketingOfficer {
     String LastName;
     String PhoneNumber;
     String Address;
-    TicketingOfficer(int salary, String FirstName, String LastName, String PhoneNumber, String Address){
+
+    public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
+        this.id = id;
         this.salary = salary;
         this.FirstName = FirstName;
         this.LastName = LastName;
@@ -69,29 +71,25 @@ public class TicketingOfficer {
 
 
     //TODO: add implementation
-    public boolean bookTicket(){
+    public boolean bookTicket(Ticket ticket) {
         return true;
     }
 
-    public Ticket findTicket(Ticket ticket){
-        return ticket;
+    public Ticket findTicket(String ticketNumber) {
+
+        return null;
     }
 
-    public List<Ticket> viewTickets(){
+    public List<Ticket> viewTickets() {
         return null;
     }
 
 
-    public List<Train> viewTrains(){
+    public List<Train> viewTrains() {
         return null;
     }
 
-    public Train findTrain(String number){
+    public Train findTrain(String number) {
         return null;
     }
-
-
-
-
-
 }
