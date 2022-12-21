@@ -6,6 +6,7 @@
             <source-roots>
                 <root id="src.java.dir" name="TRS.java"/>
                 <root id="src.resources.dir" name="TRS.resources"/>
+                <root id="src.annotations.dir" name="TRS.annotations"/>
             </source-roots>
             <test-roots/>
         </data>
