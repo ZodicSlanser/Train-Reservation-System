@@ -6,12 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class CRUDS {
+public abstract class CRUD {
     private static ResultSet RS;
     private static PreparedStatement PS;
     private static boolean CONNECTED = false;
     private static Connection connection;
-
 
     //Connect to the database at instantiation
     static {
@@ -72,15 +71,23 @@ public class CRUDS {
         }
     }
 
-    //Utility method to update values in a table where a condition is met
+    //Utility method to update a row in a table
     protected static void update(String tableName, List<String> columns, List<String> values, String condition) throws SQLException {
         if (isConnected()) {
-            String sql = "UPDATE " + tableName + " SET " + String.join(", ", columns) + " = " + String.join(", ", values) + " WHERE " + condition;
+            String sql = "UPDATE " + tableName + " SET ";
+            for (int i = 0; i < columns.size(); i++) {
+                sql += columns.get(i) + " = " + values.get(i);
+                if (i != columns.size() - 1) {
+                    sql += ", ";
+                }
+            }
+            sql += " WHERE " + condition;
             System.out.println(sql);
             PS = connection.prepareStatement(sql);
             PS.executeUpdate();
         }
     }
+
 
     //Utility method to update a single in a table where a condition is met
     protected static void update(String tableName, String columns, String values, String condition) throws SQLException {
@@ -93,8 +100,11 @@ public class CRUDS {
     }
 
     //Utility method to delete everything from the database
-    protected static void prune(String tableName) {
-        String sql = "DELETE FROM " + tableName + " WHERE " + " 1=1 ";
+    protected static void prune(String tableName) throws SQLException {
+        if (isConnected()) {
+            PS = connection.prepareStatement("DELETE FROM " + tableName);
+            PS.executeUpdate();
+        }
     }
 
     //a utility method to delete a row from a table where a condition is met
