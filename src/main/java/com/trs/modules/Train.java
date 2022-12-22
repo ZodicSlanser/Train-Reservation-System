@@ -3,6 +3,8 @@ package com.trs.modules;
 import com.trs.modules.tickets.Ticket;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Train {
@@ -23,6 +25,21 @@ public class Train {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.maximumCapacity = maximumCapacity;
+    }
+
+    //generate trains as dummy data
+    public static ArrayList<Train> generateTrains() {
+        ArrayList<Train> trains = new ArrayList<>(List.of(
+                new Train(1, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(2, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(3, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(4, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(5, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(6, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(7, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
+                new Train(8, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100)));
+
+        return trains;
     }
 
     public int getTrainNumber() {
@@ -81,17 +98,27 @@ public class Train {
         this.maximumCapacity = maximumCapacity;
     }
 
-    //TODO: add Implementation
-    public void addTicket(Ticket ticket) {
-        if (currentCapacity < maximumCapacity) {
-            currentCapacity++;
-        }
+    public boolean has(Ticket ticket) {
+        return ticket.getTrainNumber() == trainNumber;
     }
 
-    public void removeTicket(Ticket ticket) {
-        if (currentCapacity > 0) {
-            currentCapacity--;
+    public boolean addTicket(Ticket ticket) {
+        if (currentCapacity > maximumCapacity && this.has(ticket)) {
+            currentCapacity++;
+            ticket.setTrainNumber(trainNumber);
+            return true;
         }
+        return false;
     }
+
+    public boolean removeTicket(Ticket ticket) {
+        if (currentCapacity > 0 && has(ticket)) {
+            currentCapacity--;
+            ticket.setTrainNumber(0);
+            return true;
+        }
+        return false;
+    }
+
 
 }
