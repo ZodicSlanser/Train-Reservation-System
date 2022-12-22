@@ -1,6 +1,6 @@
 package com.trs.api.managers;
 
-import com.trs.api.database.CRUDS;
+import com.trs.api.database.CRUD;
 import com.trs.modules.Train;
 
 import java.sql.ResultSet;
@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainManager extends CRUDS {
+public class TrainManager extends CRUD {
     private final static List<String> TRAIN_COLUMNS = List.of("number", "capacity", "type", "departureTime", "arrivalTime", "departureStation", "arrivalStation");
 
-    TrainManager() {
+    public TrainManager() {
         super();
     }
 
@@ -41,11 +41,17 @@ public class TrainManager extends CRUDS {
     }
 
     //a method that returns a single train from database
-    public Train getTrain(String condition) throws SQLException {
+    public Train getTrain(int number) throws SQLException {
         if (isConnected()) {
-            ResultSet rs = get("trains", "*", condition);
+            ResultSet rs = get("trains", "Number", String.valueOf(number));
             if (rs.next()) {
-                return new Train(rs.getInt("Number"), rs.getString("Type"), rs.getTimestamp("departureTime"), rs.getTimestamp("arrivalTime"), rs.getString("departureStation"), rs.getString("arrivalStation"), rs.getInt("Capacity"));
+                return new Train(rs.getInt("Number"),
+                        rs.getString("Type"),
+                        rs.getTimestamp("departureTime"),
+                        rs.getTimestamp("arrivalTime"),
+                        rs.getString("departureStation"),
+                        rs.getString("arrivalStation"),
+                        rs.getInt("Capacity"));
             }
             return null;
         }
@@ -58,20 +64,31 @@ public class TrainManager extends CRUDS {
     }
 
     //a method that updates a train in the database
-    public void updateTrain(Train train, String condition) throws SQLException {
+    public void updateTrain(Train train) throws SQLException {
         if (isConnected()) {
-            update("trains", TRAIN_COLUMNS, getTrainValues(train), condition);
+            update("trains",
+                    TRAIN_COLUMNS,
+                    getTrainValues(train),
+                    "number = " + train.getTrainNumber());
+            return;
         }
         throw new SQLException("Connection to the database failed.");
     }
 
     //a method that deletes a train from the database
-    public void deleteTrain(String column, String condition) throws SQLException {
+    public void deleteTrain(Train train) throws SQLException {
         if (isConnected()) {
-            deleteWhereEqual("trains", column, condition);
+            deleteWhereEqual("trains", "number", String.valueOf(train.getTrainNumber()));
         }
 
     }
 
+    public void deleteAll() throws SQLException {
+        if (isConnected()) {
+            prune("trains");
+            return;
+        }
+        throw new SQLException("Connection to the database failed.");
+    }
 }
 
