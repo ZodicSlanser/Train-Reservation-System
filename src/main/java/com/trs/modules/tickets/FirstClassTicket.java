@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class FirstClassTicket extends Ticket {
 
-    public FirstClassTicket(String number, int fare, String TrainNumber, LocalDateTime reservationDate) {
+    public FirstClassTicket(String number, int fare, int TrainNumber, LocalDateTime reservationDate) {
         super(number, fare * 3, TrainNumber, reservationDate);
     }
 
