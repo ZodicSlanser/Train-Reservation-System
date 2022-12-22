@@ -6,10 +6,10 @@ public abstract class Ticket {
 
     protected String number;
     protected int fare;
-    protected String TrainNumber;
+    protected int TrainNumber;
     protected LocalDateTime reservationDate;
 
-    public Ticket(String number, int fare, String TrainNumber, LocalDateTime reservationDate) {
+    public Ticket(String number, int fare, int TrainNumber, LocalDateTime reservationDate) {
         this.number = number;
         this.TrainNumber = TrainNumber;
         this.reservationDate = reservationDate;
@@ -31,11 +31,11 @@ public abstract class Ticket {
         this.fare = fare;
     }
 
-    public String getTrainNumber() {
+    public int getTrainNumber() {
         return TrainNumber;
     }
 
-    public void setTrainNumber(String trainNumber) {
+    public void setTrainNumber(int trainNumber) {
         TrainNumber = trainNumber;
     }
 
