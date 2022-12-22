@@ -2,6 +2,7 @@ package com.trs.modules;
 
 import com.trs.modules.tickets.Ticket;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class SystemAdmin extends TicketingOfficer {
@@ -9,41 +10,85 @@ public class SystemAdmin extends TicketingOfficer {
         super(id, FirstName, LastName, PhoneNumber, salary, Address);
     }
 
-    //TODO: add implementation
-    public List<TicketingOfficer> viewOfficers() {
-        return null;
+    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
+        super(FirstName, LastName, PhoneNumber, salary, Address);
+    }
+
+
+    public List<TicketingOfficer> viewOfficers() throws SQLException {
+        return officerManager.getAllTicketingOfficers();
     }
 
     public boolean addOfficer(TicketingOfficer officer) {
-        return true;
+        try {
+            officerManager.insertTicketingOfficer(officer);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean deleteOfficer(TicketingOfficer officer) {
-        return true;
+        try {
+            officerManager.deleteTicketingOfficer(officer);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public boolean updateOfficer(TicketingOfficer oldOfficer, TicketingOfficer newOfficer) {
-        return true;
+    public boolean updateOfficer(TicketingOfficer newOfficer) {
+        try {
+            officerManager.updateTicketingOfficer(newOfficer);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean addTrain(Train train) {
-        return true;
+        try {
+            trainManager.insertTrain(train);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean deleteTrain(Train train) {
-        return true;
+        try {
+            trainManager.deleteTrain(train);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public boolean updateTrain(Train oldTrain, Train otherTrain) {
-        return true;
+    public boolean updateTrain(Train otherTrain) {
+        try {
+            trainManager.updateTrain(otherTrain);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public boolean editTicket(Ticket oldTicket, Ticket otherTicket) {
-        return true;
+    public boolean editTicket(Ticket otherTicket) {
+        try {
+            ticketManager.updateTicket(otherTicket);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean deleteTicket(Ticket ticket) {
-        return true;
+        try {
+            ticketManager.removeTicket(ticket);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
 }

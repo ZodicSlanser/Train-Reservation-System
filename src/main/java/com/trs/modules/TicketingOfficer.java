@@ -1,7 +1,11 @@
 package com.trs.modules;
 
+import com.trs.api.managers.OfficerManager;
+import com.trs.api.managers.TicketManager;
+import com.trs.api.managers.TrainManager;
 import com.trs.modules.tickets.Ticket;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class TicketingOfficer {
@@ -11,9 +15,20 @@ public class TicketingOfficer {
     String LastName;
     String PhoneNumber;
     String Address;
+    OfficerManager officerManager = new OfficerManager();
+    TrainManager trainManager = new TrainManager();
+    TicketManager ticketManager = new TicketManager();
 
     public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
         this.id = id;
+        this.salary = salary;
+        this.FirstName = FirstName;
+        this.LastName = LastName;
+        this.PhoneNumber = PhoneNumber;
+        this.Address = Address;
+    }
+
+    public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
         this.salary = salary;
         this.FirstName = FirstName;
         this.LastName = LastName;
@@ -71,25 +86,45 @@ public class TicketingOfficer {
 
 
     //TODO: add implementation
-    public boolean bookTicket(Ticket ticket) {
-        return true;
+    public boolean bookTicket(Ticket ticket, Train train) throws SQLException {
+        try {
+            ticketManager.addTicket(ticket);
+            return train.addTicket(ticket);
+        } catch (Exception e) {
+            throw new SQLException("Error in booking ticket");
+        }
     }
 
     public Ticket findTicket(String ticketNumber) {
-
-        return null;
+        try {
+            return ticketManager.getTicket(ticketNumber);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<Ticket> viewTickets() {
-        return null;
+        try {
+            return ticketManager.getAllTickets();
+        } catch (Exception e) {
+            return null;
+        }
     }
-
 
     public List<Train> viewTrains() {
-        return null;
+        try {
+            return trainManager.getAllTrains();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    public Train findTrain(String number) {
-        return null;
+    public Train findTrain(int number) {
+        try {
+            return trainManager.getTrain(number);
+        } catch (Exception e) {
+            return null;
+        }
     }
+
 }
