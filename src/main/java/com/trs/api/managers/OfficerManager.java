@@ -24,7 +24,9 @@ public class OfficerManager extends CRUD {
                 "'" + officer.getFirstName() + "'",
                 "'" + officer.getLastName() + "'",
                 "'" + officer.getPhoneNumber() + "'",
-                "'" + officer.getAddress() + "'"
+                "'" + officer.getAddress() + "'",
+                "`" + officer.getUsername() + "'",
+                "'" + officer.getPassword() + "'"
         );
     }
 
@@ -45,9 +47,23 @@ public class OfficerManager extends CRUD {
         while (rs.next()) {
             switch (rs.getInt("Type")) {
                 case 1 ->
-                        ticketingOfficers.add(new TicketingOfficer(rs.getInt("AID"), rs.getString("FName"), rs.getString("LName"), rs.getString("PhoneNumber"), rs.getInt("salary"), rs.getString("Address")));
+                        ticketingOfficers.add(new TicketingOfficer(rs.getInt("AID"),
+                                rs.getString("FName"),
+                                rs.getString("LName"),
+                                rs.getString("PhoneNumber"),
+                                rs.getInt("salary"),
+                                rs.getString("Address"),
+                                rs.getString("username"),
+                                rs.getString("password")));
                 case 0 ->
-                        ticketingOfficers.add(new SystemAdmin(rs.getInt("AID"), rs.getString("FName"), rs.getString("LName"), rs.getString("PhoneNumber"), rs.getInt("salary"), rs.getString("Address")));
+                        ticketingOfficers.add(new SystemAdmin(rs.getInt("AID"),
+                                rs.getString("FName"),
+                                rs.getString("LName"),
+                                rs.getString("PhoneNumber"),
+                                rs.getInt("salary"),
+                                rs.getString("Address"),
+                        rs.getString("username"),
+                        rs.getString("password")));
             }
         }
         return ticketingOfficers;
@@ -56,6 +72,19 @@ public class OfficerManager extends CRUD {
     //a method that returns a single TicketingOfficer from database
     public TicketingOfficer getTicketingOfficer(int AID) throws SQLException {
         ResultSet rs = get("officers", "AID", String.valueOf(AID));
+        assert rs != null;
+        return setOfficerType(rs);
+    }
+
+    //a method that returns a TicketingOfficer with a specific username and password
+    public TicketingOfficer getTicketingOfficer(String username, String password, int type) throws SQLException {
+        ResultSet rs = get("officers", "username",username + "And password = " + password + " type = " + type );
+        assert rs != null;
+        return setOfficerType(rs);
+    }
+
+    //a method to set officer type
+    private TicketingOfficer setOfficerType(ResultSet rs) throws SQLException {
         if (rs.next()) {
             switch (rs.getInt("Type")) {
                 case 1 -> {
@@ -64,7 +93,9 @@ public class OfficerManager extends CRUD {
                             rs.getString("LName"),
                             rs.getString("PhoneNumber"),
                             rs.getInt("salary"),
-                            rs.getString("Address"));
+                            rs.getString("Address"),
+                            rs.getString("username"),
+                            rs.getString("password"));
                 }
                 case 0 -> {
                     return new SystemAdmin(rs.getInt("AID"),
@@ -72,13 +103,14 @@ public class OfficerManager extends CRUD {
                             rs.getString("LName"),
                             rs.getString("PhoneNumber"),
                             rs.getInt("salary"),
-                            rs.getString("Address"));
+                            rs.getString("Address"),
+                            rs.getString("username"),
+                            rs.getString("password"));
                 }
             }
         }
         return null;
     }
-
     //a method that inserts a TicketingOfficer into the database
     public void insertTicketingOfficer(TicketingOfficer ticketingOfficer) throws SQLException {
         if (isConnected()) {
