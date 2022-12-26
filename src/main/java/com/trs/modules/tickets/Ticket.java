@@ -47,5 +47,6 @@ public abstract class Ticket {
         this.reservationDate = reservationDate;
     }
 
+    //get the ticket type
     public abstract int getTicketClass();
 }

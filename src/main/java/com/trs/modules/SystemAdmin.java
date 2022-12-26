@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SystemAdmin extends TicketingOfficer {
-    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
-        super(id, FirstName, LastName, PhoneNumber, salary, Address);
+    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
+        super(id, FirstName, LastName, PhoneNumber, salary, Address,username,password);
     }
 
-    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
-        super(FirstName, LastName, PhoneNumber, salary, Address);
+    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username,String password) {
+        super(FirstName, LastName, PhoneNumber, salary, Address,username,password);
     }
 
 

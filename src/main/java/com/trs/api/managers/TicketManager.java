@@ -55,6 +55,7 @@ public class TicketManager extends CRUD {
     //a method that returns a single Ticket from database
     public Ticket getTicket(String number) throws SQLException {
         ResultSet rs = get("tickets", "Number", number);
+        assert rs != null;
         if (rs.next()) {
             switch (rs.getInt("class")) {
                 case 1 -> {

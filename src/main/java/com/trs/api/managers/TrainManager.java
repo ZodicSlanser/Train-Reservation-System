@@ -82,7 +82,6 @@ public class TrainManager extends CRUD {
         }
 
     }
-
     public void deleteAll() throws SQLException {
         if (isConnected()) {
             prune("trains");
