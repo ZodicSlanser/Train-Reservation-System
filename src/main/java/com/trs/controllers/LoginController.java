@@ -1,5 +1,6 @@
 package com.trs.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -7,11 +8,12 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class loginController implements Initializable {
+public class LoginController implements Initializable {
+
+    @FXML
+    public Button loginBtn;
     @FXML
     private TextField usernameTextField;
-    @FXML
-    private Button loginButton;
     @FXML
     private PasswordField passwordTextField;
     @FXML
@@ -22,8 +24,14 @@ public class loginController implements Initializable {
     ToggleGroup typePicker = new ToggleGroup();
 
 
+    @FXML
+    public void processLogin(ActionEvent actionEvent) {
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
 }
