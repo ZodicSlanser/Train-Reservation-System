@@ -19,17 +19,17 @@
          <TableColumn fx:id="trainTypeColumn" prefWidth="104.0" text="Train Type" />
       </columns>
    </TableView>
-   <Button fx:id="addBtn" layoutX="392.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewAddTrain" prefHeight="40.0" prefWidth="71.0" text="New">
+   <Button fx:id="addTrainBtn" layoutX="392.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewAddTrainPage" prefHeight="40.0" prefWidth="71.0" text="New">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="editBtn" layoutX="491.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewEditTrain" prefHeight="40.0" prefWidth="75.0" text="Edit">
+   <Button fx:id="editTrainBtn" layoutX="491.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewEditTrainPage" prefHeight="40.0" prefWidth="75.0" text="Edit">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="deleteBtn" layoutX="591.0" layoutY="404.0" mnemonicParsing="false" onAction="#deleteSelectedTrain" prefHeight="34.0" prefWidth="79.0" text="Delete" textOverrun="WORD_ELLIPSIS">
+   <Button fx:id="deleteTrainBtn" layoutX="591.0" layoutY="404.0" mnemonicParsing="false" onAction="#deleteSelectedTrain" prefHeight="34.0" prefWidth="79.0" text="Delete" textOverrun="WORD_ELLIPSIS">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
@@ -84,7 +84,7 @@
          <Font name="System Bold" size="18.0" />
       </font>
    </Label>
-   <Button fx:id="backBtn" layoutX="26.0" layoutY="404.0" mnemonicParsing="false" onAction="#ViewSelectAction" text="Back">
+   <Button fx:id="backBtn" layoutX="26.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewSelectActionPage" text="Back">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
