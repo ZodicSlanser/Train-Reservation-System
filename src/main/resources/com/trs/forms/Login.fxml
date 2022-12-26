@@ -58,4 +58,15 @@
          <Font name="Arial Bold" size="28.0" />
       </font>
    </Label>
+   <Label fx:id="youFailedLabel" layoutX="196.0" layoutY="225.0" prefHeight="22.0" prefWidth="338.0" text="You failed to log-in 3 times, please try again after" textFill="#df0707">
+      <font>
+         <Font name="Arial Rounded MT Bold" size="14.0" />
+      </font>
+   </Label>
+   <Label fx:id="timeLabel" layoutX="534.0" layoutY="227.0" text="30" textFill="RED" />
+   <Label fx:id="secondsLabel" layoutX="559.0" layoutY="225.0" prefHeight="22.0" prefWidth="70.0" text="seconds" textFill="#df0707">
+      <font>
+         <Font name="Arial Rounded MT Bold" size="14.0" />
+      </font>
+   </Label>
 </AnchorPane>
