@@ -11,6 +11,10 @@ import javafx.scene.control.TextField;
 
 public class ManageTrainController {
 
+   public ManageTrainController(){
+        super();
+    }
+
     private int trainNumber;
     private String type;
     private String departureDate;
@@ -96,9 +100,25 @@ public class ManageTrainController {
     @FXML
     public void exitHandle(ActionEvent actionEvent) {
     }
+
+    private Timestamp getDateTime(String date, String hour, String minute){
+        return getTimestamp(date, hour, minute);
+    }
+
+    static Timestamp getTimestamp(String date, String hour, String minute) {
+        String[] dateArray = date.split("-");
+        int year = Integer.parseInt(dateArray[0]);
+        int month = Integer.parseInt(dateArray[1]);
+        int day = Integer.parseInt(dateArray[2]);
+        int hourInt = Integer.parseInt(hour);
+        int minuteInt = Integer.parseInt(minute);
+        return new Timestamp(year, month, day, hourInt, minuteInt, 0, 0);
+    }
+
     @FXML
     void initialize() {
         isInitialized();
+
 
 
     }
