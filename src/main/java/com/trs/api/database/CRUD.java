@@ -54,7 +54,9 @@ public abstract class CRUD {
     //Utility method to return a single value from a table
     protected static ResultSet get(String table, String column, String condition) throws SQLException {
         if (isConnected()) {
-            PS = connection.prepareStatement("SELECT " + column + " FROM " + table + " WHERE " + condition);
+            String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
+            PS = connection.prepareStatement(sql);
+            System.out.println(sql);
             RS = PS.executeQuery();
             return RS;
         }
