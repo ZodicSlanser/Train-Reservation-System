@@ -1,6 +1,7 @@
 package com.trs.controllers;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +10,21 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 public class ManageTrainController {
+
+    private int trainNumber;
+    private String type;
+    private String departureDate;
+    private String departureHour;
+    private String departureMinute;
+    private String arrivalDate;
+    private String arrivalHour;
+    private String arrivalMinute;
+    private String departureStation;
+    private String arrivalStation;
+    private Timestamp departureDateTime;
+    private Timestamp arrivalDateTime;
+    private int maximumCapacity;
+    private int currentCapacity;
 
     @FXML
     private ResourceBundle resources;
@@ -23,7 +39,7 @@ public class ManageTrainController {
     private TextField trainNumberTextField;
 
     @FXML
-    private TextField departureHour;
+    private TextField departureHourTextField;
 
     @FXML
     private TextField departureStationTextField;
@@ -32,7 +48,7 @@ public class ManageTrainController {
     private TextField arrivalStationTextField;
 
     @FXML
-    private TextField arrivalHour;
+    private TextField arrivalHourTextField;
 
     @FXML
     private Button addtrainButton;
@@ -47,10 +63,10 @@ public class ManageTrainController {
     private TextField typeTextField;
 
     @FXML
-    private TextField departureMinute;
+    private TextField departureMinuteTextField;
 
     @FXML
-    private TextField arrivalMinute;
+    private TextField arrivalMinuteTextField;
 
     @FXML
     private DatePicker departureDatePicker;
@@ -58,18 +74,35 @@ public class ManageTrainController {
     @FXML
     private DatePicker arrivalDatePicker;
 
-    @FXML
-    void addtrainhandle(ActionEvent event) {
 
+    @FXML
+    public void viewSelectActionPage(ActionEvent actionEvent) {
+    }
+    @FXML
+    public void viewAddTrainPage(ActionEvent actionEvent) {
     }
 
     @FXML
-    void exithandle(ActionEvent event) {
-
+    public void viewEditTrainPage(ActionEvent actionEvent) {
     }
 
+    @FXML
+    public void deleteSelectedTrain(ActionEvent actionEvent) {
+    }
+    @FXML
+    public void addTrain(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void exitHandle(ActionEvent actionEvent) {
+    }
     @FXML
     void initialize() {
+        isInitialized();
+
+
+    }
+    public void isInitialized(){
         assert maxCapacityTextField != null : "fx:id=\"maxCapacityTextField\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
         assert trainNumberTextField != null : "fx:id=\"trainNumberTextField\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
         assert departureHour != null : "fx:id=\"departureHour\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
@@ -84,6 +117,8 @@ public class ManageTrainController {
         assert arrivalMinute != null : "fx:id=\"arrivalMinute\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
         assert departureDatePicker != null : "fx:id=\"departureDatePicker\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
         assert arrivalDatePicker != null : "fx:id=\"arrivalDatePicker\" was not injected: check your FXML file 'ManageTrainController.fxml'.";
-
     }
+
+
+
 }
