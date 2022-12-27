@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 public class LoginController extends FormNavigator implements Initializable {
-    LoginController(){
+   public LoginController(){
         super();
     }
     @FXML
@@ -35,6 +34,7 @@ public class LoginController extends FormNavigator implements Initializable {
     @FXML
     private ToggleGroup typePicker;
 
+    public static int type;
    private static short tryCounter = 0;
     OfficerManager officerManager = new OfficerManager();
 
@@ -62,7 +62,7 @@ public class LoginController extends FormNavigator implements Initializable {
     @FXML
     public void processLogin(ActionEvent actionEvent) throws SQLException, InterruptedException, IOException {
         if (tryCounter == 3){
-            timeout();
+           // timeout();
         }
         if(isTextEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Please enter username and password");
@@ -70,18 +70,17 @@ public class LoginController extends FormNavigator implements Initializable {
         }
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
-        int type = adminRadio.isSelected()? 0 : 1;
+        type = adminRadio.isSelected()? 0 : 1;
 
         if(officerManager.getTicketingOfficer(username,password,type) == null){
             tryCounter++;
             new Alert(Alert.AlertType.ERROR, "username or password incorrect");
             return;
         }
-
         if(type == 0) {
-            navigateTo(actionEvent, "AdminSelection.fxml");
+            navigateTo(actionEvent, "/com/trs/forms/AdminActionPage.fxml");
         }else{
-            navigateTo(actionEvent, "OfficerSelection.fxml");
+            navigateTo(actionEvent, "/com/trs/forms/OfficerActionPage.fxml");
         }
     }
     @Override
