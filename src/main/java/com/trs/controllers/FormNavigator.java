@@ -43,7 +43,7 @@ public abstract class FormNavigator {
     }
 
     public void viewManageTrainPage(ActionEvent actionEvent) throws IOException {
-        Parent manageTrainPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/trs/views/ManageTrain.fxml")));
+        Parent manageTrainPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/trs/views/ViewTrain.fxml")));
         Scene manageTrainPageScene = new Scene(manageTrainPage);
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         window.setScene(manageTrainPageScene);
