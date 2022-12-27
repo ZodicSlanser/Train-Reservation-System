@@ -11,6 +11,10 @@ import javafx.scene.control.TextField;
 
 public class ReserveTicketController {
 
+   public ReserveTicketController(){
+        super();
+    }
+
     @FXML
     private ResourceBundle resources;
 

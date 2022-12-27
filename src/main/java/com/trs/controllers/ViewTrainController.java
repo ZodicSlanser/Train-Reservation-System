@@ -13,6 +13,10 @@ import javafx.scene.control.TableView;
 
 public class ViewTrainController extends FormNavigator implements Initializable {
 
+  public  ViewTrainController(){
+        super();
+    }
+
     private int trainNumber;
     private String type;
     private String departureDate;
@@ -73,21 +77,21 @@ public class ViewTrainController extends FormNavigator implements Initializable 
 
     }
 
-    //method to turn the date and time into a timestamp
-    private Timestamp getDateTime(String date, String hour, String minute){
-        String[] dateArray = date.split("-");
-        int year = Integer.parseInt(dateArray[0]);
-        int month = Integer.parseInt(dateArray[1]);
-        int day = Integer.parseInt(dateArray[2]);
-        int hourInt = Integer.parseInt(hour);
-        int minuteInt = Integer.parseInt(minute);
-        return new Timestamp(year, month, day, hourInt, minuteInt, 0, 0);
+    public void disableButtons() {
+        addTrainBtn.setDisable(true);
+        editTrainBtn.setDisable(true);
+        deleteTrainBtn.setDisable(true);
     }
 
+    //method to turn the date and time into a timestamp
+    private Timestamp getDateTime(String date, String hour, String minute){
+        return ManageTrainController.getTimestamp(date, hour, minute);
+    }
 
     @FXML
     void initialize() {
         isInitialized();
+
 
     }
     private void  isInitialized(){
@@ -102,7 +106,6 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         assert trainTable != null : "fx:id=\"trainTable\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert trainTypeColumn != null : "fx:id=\"trainTypeColumn\" was not injected: check your FXML file 'ViewTrain.fxml'.";
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

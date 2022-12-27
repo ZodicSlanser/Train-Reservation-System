@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 public class OfficerActionController {
-
+   public OfficerActionController(){
+        super();
+    }
     @FXML
     private ResourceBundle resources;
 
@@ -40,9 +42,9 @@ public class OfficerActionController {
 
     @FXML
     void initialize() {
-        assert viewTrainButton != null : "fx:id=\"viewTrainButton\" was not injected: check your FXML file 'OfficerHomePage.fxml'.";
-        assert addTicketButton != null : "fx:id=\"addTicketButton\" was not injected: check your FXML file 'OfficerHomePage.fxml'.";
-        assert ExitButton != null : "fx:id=\"ExitButton\" was not injected: check your FXML file 'OfficerHomePage.fxml'.";
+        assert viewTrainButton != null : "fx:id=\"viewTrainButton\" was not injected: check your FXML file 'OfficerActionPage.fxml'.";
+        assert addTicketButton != null : "fx:id=\"addTicketButton\" was not injected: check your FXML file 'OfficerActionPage.fxml'.";
+        assert ExitButton != null : "fx:id=\"ExitButton\" was not injected: check your FXML file 'OfficerActionPage.fxml'.";
 
     }
 }
