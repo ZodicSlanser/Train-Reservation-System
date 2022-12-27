@@ -54,7 +54,9 @@ public abstract class CRUD {
     //Utility method to return a single value from a table
     protected static ResultSet get(String table, String column, String condition) throws SQLException {
         if (isConnected()) {
-            PS = connection.prepareStatement("SELECT " + column + " FROM " + table + " WHERE " + condition);
+            String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
+            PS = connection.prepareStatement(sql);
+            System.out.println(sql);
             RS = PS.executeQuery();
             return RS;
         }
@@ -75,9 +77,9 @@ public abstract class CRUD {
     protected static void update(String tableName, List<String> columns, List<String> values, String condition) throws SQLException {
         if (isConnected()) {
             String sql = "UPDATE " + tableName + " SET ";
-            for (int i = 0; i < columns.size(); i++) {
+            for (int i = 0; i < columns.size()-1; i++) {
                 sql += columns.get(i) + " = " + values.get(i);
-                if (i != columns.size() - 1) {
+                if (i != columns.size() - 2) {
                     sql += ", ";
                 }
             }

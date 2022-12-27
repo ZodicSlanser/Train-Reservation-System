@@ -14,6 +14,10 @@ public abstract class Ticket {
         this.TrainNumber = TrainNumber;
         this.reservationDate = reservationDate;
     }
+    public Ticket(int fare, int TrainNumber, LocalDateTime reservationDate) {
+        this.TrainNumber = TrainNumber;
+        this.reservationDate = reservationDate;
+    }
 
     public String getNumber() {
         return number;
@@ -47,5 +51,6 @@ public abstract class Ticket {
         this.reservationDate = reservationDate;
     }
 
+    //get the ticket type
     public abstract int getTicketClass();
 }

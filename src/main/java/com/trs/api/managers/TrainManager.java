@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainManager extends CRUD {
-    private final static List<String> TRAIN_COLUMNS = List.of("number", "capacity", "type", "departureTime", "arrivalTime", "departureStation", "arrivalStation");
+    private static List<Integer> trainNumbers = new ArrayList<>();
+    private final static List<String> TRAIN_COLUMNS = List.of("number", "capacity", "type", "departureTime", "arrivalTime", "departureStation", "arrivalStation","price");
 
     public TrainManager() {
         super();
@@ -24,16 +25,30 @@ public class TrainManager extends CRUD {
                 "\"" + String.valueOf(train.getDepartureTime()) + "\"",
                 "\"" + String.valueOf(train.getArrivalTime()) + "\"",
                 "\"" + train.getDepartureStation() + "\"",
-                "\"" + train.getArrivalStation() + "\"");
+                "\"" + train.getArrivalStation() + "\"",
+                "\"" + train.getPrice() + "\"");
     }
 
+    public static boolean trainNumberExists(int trainNumber) {
+        return trainNumbers.contains(trainNumber);
+    }
     // a method that returns all trains from database
-    public List<Train> getAllTrains() throws SQLException {
+    public static List<Train> getAllTrains() throws SQLException {
         if (isConnected()) {
             List<Train> trains = new ArrayList<>();
             ResultSet rs = getAll("trains");
+            assert rs != null;
+            trainNumbers.add(rs.getInt("Number"));
             while (rs.next()) {
-                trains.add(new Train(rs.getInt("Number"), rs.getString("Type"), rs.getTimestamp("departureTime"), rs.getTimestamp("arrivalTime"), rs.getString("departureStation"), rs.getString("arrivalStation"), rs.getInt("Capacity")));
+                System.out.println( rs.getInt("number") );
+                trains.add(new Train(rs.getInt("Number"),
+                        rs.getString("Type"),
+                        rs.getTimestamp("departureTime"),
+                        rs.getTimestamp("arrivalTime"),
+                        rs.getString("departureStation"),
+                        rs.getString("arrivalStation"),
+                        rs.getInt("Capacity"),
+                        rs.getInt("Price")));
             }
             return trains;
         }
@@ -51,7 +66,8 @@ public class TrainManager extends CRUD {
                         rs.getTimestamp("arrivalTime"),
                         rs.getString("departureStation"),
                         rs.getString("arrivalStation"),
-                        rs.getInt("Capacity"));
+                        rs.getInt("Capacity"),
+                rs.getInt("price"));
             }
             return null;
         }
@@ -76,13 +92,12 @@ public class TrainManager extends CRUD {
     }
 
     //a method that deletes a train from the database
-    public void deleteTrain(Train train) throws SQLException {
+    public static void deleteTrain(Train train) throws SQLException {
         if (isConnected()) {
             deleteWhereEqual("trains", "number", String.valueOf(train.getTrainNumber()));
         }
 
     }
-
     public void deleteAll() throws SQLException {
         if (isConnected()) {
             prune("trains");

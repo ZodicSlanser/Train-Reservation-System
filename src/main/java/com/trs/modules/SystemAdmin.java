@@ -6,12 +6,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SystemAdmin extends TicketingOfficer {
-    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
-        super(id, FirstName, LastName, PhoneNumber, salary, Address);
+    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
+        super(id, FirstName, LastName, PhoneNumber, salary, Address,username,password);
+        this.position = getPosition();
     }
 
-    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
-        super(FirstName, LastName, PhoneNumber, salary, Address);
+    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username,String password) {
+        super(FirstName, LastName, PhoneNumber, salary, Address,username,password);
+        this.position = getPosition();
+    }
+
+    public SystemAdmin() {
+        super();
+        this.position = getPosition();
     }
 
 
@@ -19,12 +26,12 @@ public class SystemAdmin extends TicketingOfficer {
         return officerManager.getAllTicketingOfficers();
     }
 
-    public boolean addOfficer(TicketingOfficer officer) {
+    public String addOfficer(TicketingOfficer officer) {
         try {
             officerManager.insertTicketingOfficer(officer);
-            return true;
+            return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -37,21 +44,21 @@ public class SystemAdmin extends TicketingOfficer {
         }
     }
 
-    public boolean updateOfficer(TicketingOfficer newOfficer) {
+    public String updateOfficer(TicketingOfficer newOfficer) {
         try {
             officerManager.updateTicketingOfficer(newOfficer);
-            return true;
+          return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 
-    public boolean addTrain(Train train) {
+    public String addTrain(Train train) {
         try {
             trainManager.insertTrain(train);
-            return true;
+            return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -64,12 +71,12 @@ public class SystemAdmin extends TicketingOfficer {
         }
     }
 
-    public boolean updateTrain(Train otherTrain) {
+    public String updateTrain(Train otherTrain) {
         try {
             trainManager.updateTrain(otherTrain);
-            return true;
+            return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -89,6 +96,11 @@ public class SystemAdmin extends TicketingOfficer {
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    @Override
+    public String getPosition() {
+        return "System Admin";
     }
 
 }

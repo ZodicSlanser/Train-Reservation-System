@@ -9,31 +9,48 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TicketingOfficer {
-    int id;
-    int salary;
-    String FirstName;
-    String LastName;
-    String PhoneNumber;
-    String Address;
-    OfficerManager officerManager = new OfficerManager();
+    protected int id;
+    protected int salary;
+    protected String username;
+    protected String password;
+    protected String firstName;
+    protected String lastName;
+    protected String phoneNumber;
+    protected String address;
+
+    protected String position;
+    protected final OfficerManager officerManager = new OfficerManager();
     TrainManager trainManager = new TrainManager();
     TicketManager ticketManager = new TicketManager();
 
-    public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
-        this.id = id;
+    public TicketingOfficer(){
+        this.position = getPosition();
+    }
+    public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username, String password)
+    {   this.id = id;
         this.salary = salary;
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.PhoneNumber = PhoneNumber;
-        this.Address = Address;
+        this.firstName = FirstName;
+        this.lastName = LastName;
+        this.phoneNumber = PhoneNumber;
+        this.address = Address;
+        this.username = username;
+        this.password = password;
+        this.position = getPosition();
     }
 
-    public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address) {
+    public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
         this.salary = salary;
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.PhoneNumber = PhoneNumber;
-        this.Address = Address;
+        this.firstName = FirstName;
+        this.lastName = LastName;
+        this.phoneNumber = PhoneNumber;
+        this.address = Address;
+        this.username = username;
+        this.password = password;
+        this.position = getPosition();
+    }
+
+    public String getPosition() {
+        return "Ticketing Officer";
     }
 
     public int getId() {
@@ -53,35 +70,52 @@ public class TicketingOfficer {
     }
 
     public String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
+    }
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

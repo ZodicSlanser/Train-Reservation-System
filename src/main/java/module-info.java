@@ -5,5 +5,7 @@ module com.railway.trs {
     requires com.dlsc.formsfx;
     requires java.sql;
     opens com.trs to javafx.fxml;
+    opens com.trs.controllers to javafx.fxml;
+    opens com.trs.modules to javafx.base;
     exports com.trs;
 }

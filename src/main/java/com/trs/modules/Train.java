@@ -1,23 +1,27 @@
 package com.trs.modules;
 
+import com.trs.api.managers.TicketManager;
 import com.trs.modules.tickets.Ticket;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Train {
-    private int trainNumber;
-    private String type;
-    private Timestamp departureTime;
-    private Timestamp arrivalTime;
-    private String departureStation;
-    private String arrivalStation;
-    private int maximumCapacity;
-    private int currentCapacity;
+    protected int trainNumber;
+    protected String type;
+    protected Timestamp departureTime;
+    protected Timestamp arrivalTime;
+    protected String departureStation;
+    protected String arrivalStation;
+    protected int maximumCapacity;
+    protected int currentCapacity;
+    protected int price;
+    protected List<Ticket> trainTickets;
 
-    public Train(int trainNumber, String type, Timestamp departureTime, Timestamp arrivalTime, String departureStation, String arrivalStation, int maximumCapacity) {
+    public Train(int trainNumber, String type, Timestamp departureTime, Timestamp arrivalTime, String departureStation, String arrivalStation, int maximumCapacity,int price) throws SQLException {
         this.trainNumber = trainNumber;
         this.type = type;
         this.departureTime = departureTime;
@@ -25,23 +29,46 @@ public class Train {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.maximumCapacity = maximumCapacity;
+        this.price = price;
+        trainTickets = TicketManager.getTrainTickets(String.valueOf(trainNumber));
+        currentCapacity = calculateCurrentCapacity();
+    }
+
+    public Train() throws SQLException {
+        trainTickets = TicketManager.getTrainTickets(String.valueOf(trainNumber));
+        currentCapacity = calculateCurrentCapacity();
+    }
+
+
+    private int calculateCurrentCapacity() throws SQLException {
+        return maximumCapacity - trainTickets.size() ;
     }
 
     //generate trains as dummy data
-    public static ArrayList<Train> generateTrains() {
+    public static ArrayList<Train> generateTrains() throws SQLException {
         ArrayList<Train> trains = new ArrayList<>(List.of(
-                new Train(1, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(2, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(3, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(4, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(5, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(6, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(7, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100),
-                new Train(8, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100)));
+                new Train(1, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(2, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(3, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(4, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(5, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(6, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(7, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
+                new Train(8, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100)));
 
         return trains;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    public int getCurrentCapacity() {
+        return currentCapacity;
+    }
     public int getTrainNumber() {
         return trainNumber;
     }
@@ -102,13 +129,20 @@ public class Train {
         return ticket.getTrainNumber() == trainNumber;
     }
 
+    public boolean isFull() {
+        return currentCapacity == maximumCapacity;
+    }
     public boolean addTicket(Ticket ticket) {
-        if (currentCapacity > maximumCapacity && this.has(ticket)) {
+        if (!isFull() && this.has(ticket)) {
             currentCapacity++;
             ticket.setTrainNumber(trainNumber);
+            trainTickets.add(ticket);
             return true;
         }
         return false;
+    }
+    public List<Ticket> getAllTrainTickets() throws SQLException {
+        return trainTickets;
     }
 
     public boolean removeTicket(Ticket ticket) {
