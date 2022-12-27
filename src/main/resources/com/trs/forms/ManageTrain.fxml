@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="621.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trs.controllers.AddTrainController">
+<AnchorPane prefHeight="621.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trs.controllers.ManageTrainController">
    <children>
       <ImageView fitHeight="621.0" fitWidth="759.0" pickOnBounds="true">
          <image>
@@ -72,7 +72,7 @@
          </font>
       </Label>
       <TextField fx:id="standardPriceTextField" layoutX="175.0" layoutY="227.0" prefHeight="31.0" prefWidth="123.0" />
-      <Label layoutX="286.0" layoutY="29.0" text="Add Train" textFill="WHITE">
+      <Label layoutX="254.0" layoutY="27.0" text="Manage Train" textFill="WHITE">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>

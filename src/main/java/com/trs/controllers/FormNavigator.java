@@ -12,12 +12,12 @@ import java.util.Objects;
 
 public abstract class FormNavigator {
     LoginController loginController;
-    ManageTrainController manageTrainController;
+    ViewTrainController manageTrainController;
 
     public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
     }
-    public void setManageTrainController(ManageTrainController manageTrainController) {
+    public void setManageTrainController(ViewTrainController manageTrainController) {
         this.manageTrainController = manageTrainController;
     }
     public void viewLoginPage(ActionEvent actionEvent) throws IOException {
