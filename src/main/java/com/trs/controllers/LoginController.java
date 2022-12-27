@@ -5,14 +5,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-public class LoginController implements Initializable {
+public class LoginController extends FormNavigator implements Initializable {
     LoginController(){
-
+        super();
     }
     @FXML
     public Button loginBtn;
@@ -58,7 +60,7 @@ public class LoginController implements Initializable {
         passwordTextField.setDisable(false);
     }
     @FXML
-    public void processLogin(ActionEvent actionEvent) throws SQLException, InterruptedException {
+    public void processLogin(ActionEvent actionEvent) throws SQLException, InterruptedException, IOException {
         if (tryCounter == 3){
             timeout();
         }
@@ -69,14 +71,19 @@ public class LoginController implements Initializable {
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
         int type = adminRadio.isSelected()? 0 : 1;
+
         if(officerManager.getTicketingOfficer(username,password,type) == null){
             tryCounter++;
             new Alert(Alert.AlertType.ERROR, "username or password incorrect");
             return;
         }
 
+        if(type == 0) {
+            navigateTo(actionEvent, "AdminSelection.fxml");
+        }else{
+            navigateTo(actionEvent, "OfficerSelection.fxml");
+        }
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isInitialized();
