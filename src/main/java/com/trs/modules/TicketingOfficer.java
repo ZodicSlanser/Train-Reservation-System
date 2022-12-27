@@ -17,10 +17,15 @@ public class TicketingOfficer {
     protected String lastName;
     protected String phoneNumber;
     protected String address;
+
+    protected String position;
     protected final OfficerManager officerManager = new OfficerManager();
     TrainManager trainManager = new TrainManager();
     TicketManager ticketManager = new TicketManager();
 
+    public TicketingOfficer(){
+        this.position = getPosition();
+    }
     public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username, String password)
     {   this.id = id;
         this.salary = salary;
@@ -30,6 +35,7 @@ public class TicketingOfficer {
         this.address = Address;
         this.username = username;
         this.password = password;
+        this.position = getPosition();
     }
 
     public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
@@ -40,7 +46,11 @@ public class TicketingOfficer {
         this.address = Address;
         this.username = username;
         this.password = password;
+        this.position = getPosition();
+    }
 
+    public String getPosition() {
+        return "Ticketing Officer";
     }
 
     public int getId() {
