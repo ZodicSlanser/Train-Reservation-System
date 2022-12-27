@@ -29,7 +29,7 @@ public class TicketManager extends CRUD {
     }
 
     //a method that returns all Tickets from database
-    public List<Ticket> getAllTickets() throws SQLException {
+    public static List<Ticket> getAllTickets() throws SQLException {
         List<Ticket> tickets = new ArrayList<>();
         ResultSet rs = getAll("tickets");
         while (rs.next()) {
@@ -81,6 +81,36 @@ public class TicketManager extends CRUD {
         }
         return null;
     }
+   static public List<Ticket> getTrainTickets(String number) throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        ResultSet rs = get("tickets", "trainNumber", number);
+        assert rs != null;
+        while (rs.next()) {
+            switch (rs.getInt("class")) {
+                case 1 -> {
+                    tickets.add(new FirstClassTicket(rs.getString("Number"),
+                            rs.getInt("Fare"),
+                            rs.getInt("TrainNumber"),
+                            rs.getTimestamp("Reservation").toLocalDateTime()));
+                }
+                case 2 -> {
+                    tickets.add(new SecondClasssTicket(rs.getString("Number"),
+                            rs.getInt("Fare"),
+                            rs.getInt("TrainNumber"),
+                            rs.getTimestamp("Reservation").toLocalDateTime()));
+                }
+                case 3 -> {
+                    tickets.add(new ThirdClassTicket(rs.getString("Number"),
+                            rs.getInt("Fare"),
+                            rs.getInt("TrainNumber"),
+                            rs.getTimestamp("Reservation").toLocalDateTime()));
+                }
+                default -> throw new IllegalStateException("ticket class doesn't exist: " + rs.getInt("Class"));
+            }
+        }
+        return tickets;
+    }
+
 
     //a method that removes a Ticket from database
     public void removeTicket(Ticket ticket) throws SQLException {

@@ -53,12 +53,12 @@ public class SystemAdmin extends TicketingOfficer {
         }
     }
 
-    public boolean addTrain(Train train) {
+    public String addTrain(Train train) {
         try {
             trainManager.insertTrain(train);
-            return true;
+            return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -71,12 +71,12 @@ public class SystemAdmin extends TicketingOfficer {
         }
     }
 
-    public boolean updateTrain(Train otherTrain) {
+    public String updateTrain(Train otherTrain) {
         try {
             trainManager.updateTrain(otherTrain);
-            return true;
+            return "Success";
         } catch (SQLException e) {
-            return false;
+            return e.getMessage();
         }
     }
 

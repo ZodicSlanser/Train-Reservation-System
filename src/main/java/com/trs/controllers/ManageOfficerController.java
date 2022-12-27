@@ -137,7 +137,6 @@ public class ManageOfficerController {
     void addHandle(ActionEvent event) {
         if (!editTrigger) {
             if (OfficerManager.IDExists(Integer.parseInt(IDTextField.getText()))) {
-
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Officer Add Failed");

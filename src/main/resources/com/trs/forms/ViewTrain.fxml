@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="527.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trs.controllers.ManageTrainController">
+<AnchorPane id="AnchorPane" prefHeight="527.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trs.controllers.ViewTrainController">
     <ImageView fitHeight="527.0" fitWidth="703.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
         <Image url="@../images/train1.jpg" />
     </ImageView>
@@ -19,17 +19,17 @@
             <TableColumn fx:id="trainTypeColumn" prefWidth="104.0" text="Train Type" />
         </columns>
     </TableView>
-    <Button fx:id="addTrainBtn" layoutX="392.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewAddTrainPage" prefHeight="40.0" prefWidth="71.0" text="New">
+    <Button fx:id="addTrainBtn" layoutX="24.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewAddTrainPage" prefHeight="40.0" prefWidth="71.0" text="New">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Button>
-    <Button fx:id="editTrainBtn" layoutX="491.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewEditTrainPage" prefHeight="40.0" prefWidth="75.0" text="Edit">
+    <Button fx:id="editTrainBtn" layoutX="126.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewEditTrainPage" prefHeight="40.0" prefWidth="75.0" text="Edit">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Button>
-    <Button fx:id="deleteTrainBtn" layoutX="591.0" layoutY="404.0" mnemonicParsing="false" onAction="#deleteSelectedTrain" prefHeight="34.0" prefWidth="79.0" text="Delete" textOverrun="WORD_ELLIPSIS">
+    <Button fx:id="deleteTrainBtn" layoutX="124.0" layoutY="451.0" mnemonicParsing="false" onAction="#deleteSelectedTrain" prefHeight="34.0" prefWidth="79.0" text="Delete" textOverrun="WORD_ELLIPSIS">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
@@ -39,7 +39,7 @@
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label layoutX="491.0" layoutY="107.0" text="Time :">
+    <Label layoutX="210.0" layoutY="224.0" text="Time :">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
@@ -49,74 +49,79 @@
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label layoutX="481.0" layoutY="72.0" text="Station :">
+    <Label layoutX="210.0" layoutY="189.0" text="Station :">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label layoutX="214.0" layoutY="207.0" prefHeight="27.0" prefWidth="98.0" text="Seats  :">
+    <Label layoutX="212.0" layoutY="303.0" prefHeight="27.0" prefWidth="110.0" text="Total Seats :">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="departureStationL" layoutX="296.0" layoutY="72.0" text="               ">
+    <Label fx:id="departureStationL" layoutX="296.0" layoutY="72.0" prefHeight="27.0" prefWidth="210.0" text="               ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="arrivalTimeL" layoutX="552.0" layoutY="107.0" prefHeight="27.0" prefWidth="79.0" text="      ">
+    <Label fx:id="arrivalTimeL" layoutX="281.0" layoutY="224.0" prefHeight="27.0" prefWidth="202.0" text="      ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="ArrivalStationL" layoutX="564.0" layoutY="72.0" text="           ">
+    <Label fx:id="arrivalStationL" layoutX="293.0" layoutY="189.0" prefHeight="27.0" prefWidth="217.0" text="           ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="departureTimeL" layoutX="285.0" layoutY="107.0" prefHeight="27.0" prefWidth="79.0" text="         ">
+    <Label fx:id="departureTimeL" layoutX="285.0" layoutY="107.0" prefHeight="27.0" prefWidth="286.0" text="         ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="maximumCapacityL" layoutX="279.0" layoutY="207.0" text="        ">
+    <Label fx:id="maximumCapacityL" layoutX="339.0" layoutY="303.0" text="        ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Button fx:id="backBtn" layoutX="26.0" layoutY="404.0" mnemonicParsing="false" onAction="#viewSelectActionPage" text="Back">
+    <Button fx:id="backBtn" layoutX="28.0" layoutY="451.0" mnemonicParsing="false" onAction="#viewSelectActionPage" text="Back">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Button>
-    <Label layoutX="214.0" layoutY="238.0" text="Standard Ticket Price :">
+    <Label layoutX="212.0" layoutY="346.0" text="Standard Ticket Price :">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label fx:id="priceL" layoutX="416.0" layoutY="238.0" prefHeight="27.0" prefWidth="52.0" text="      ">
+    <Label fx:id="priceL" layoutX="414.0" layoutY="346.0" prefHeight="27.0" prefWidth="64.0" text="      ">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Label>
-    <Label layoutX="247.0" layoutY="31.0" text="Departure">
+    <Label layoutX="376.0" layoutY="25.0" text="Departure">
         <font>
             <Font name="Times New Roman Bold" size="22.0" />
         </font>
     </Label>
-    <Label layoutX="532.0" layoutY="31.0" text="Arrival">
+    <Label layoutX="379.0" layoutY="152.0" text="Arrival">
         <font>
             <Font name="Times New Roman Bold" size="22.0" />
         </font>
     </Label>
-    <Label layoutX="388.0" layoutY="72.0" prefHeight="18.0" prefWidth="79.0" text="====&gt;">
-        <font>
-            <Font name="System Bold" size="18.0" />
-        </font>
-    </Label>
-    <Label layoutX="388.0" layoutY="107.0" prefHeight="18.0" prefWidth="79.0" text="====&gt;">
-        <font>
-            <Font name="System Bold" size="18.0" />
-        </font>
-    </Label>
+   <Label layoutX="414.0" layoutY="303.0" prefHeight="27.0" prefWidth="98.0" text="Seats left :">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font>
+   </Label>
+   <Label fx:id="currentCapacityLabel" layoutX="512.0" layoutY="303.0" text="        ">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font>
+   </Label>
+   <Button fx:id="viewTickets" layoutX="522.0" layoutY="431.0" mnemonicParsing="false" onAction="#ViewTicketsTrainPage" prefHeight="40.0" prefWidth="139.0" text="View Tickets" textOverrun="WORD_ELLIPSIS">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font>
+   </Button>
 </AnchorPane>

@@ -115,26 +115,41 @@ public class ViewOfficerController {
 
     }
 
+    void populateTable() {
+        try {
+            ArrayList<TicketingOfficer> officers = (ArrayList<TicketingOfficer>) officerManager.getAllTicketingOfficers();
+            for (TicketingOfficer officer : officers) {
+                officerTable.getItems().add(officer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+        void prepareColumns(){
+            IDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+            positionCoulmn.setCellValueFactory(new PropertyValueFactory<>("position"));
+        }
+
+        void prepareTable(){
+            officerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    TicketingOfficer officer = (TicketingOfficer) newSelection;
+                    firstNameLabel.setText(officer.getFirstName());
+                    lastNameLabel.setText(officer.getLastName());
+                    salaryLabel.setText(String.valueOf(officer.getSalary()));
+                    phoneNumberLabel.setText(officer.getPhoneNumber());
+                    addressLabel.setText(officer.getAddress());
+                }
+            });
+        }
 
     @FXML
     void initialize() throws SQLException {
         isInitialized();
-        ArrayList<TicketingOfficer> officers = (ArrayList) officerManager.getAllTicketingOfficers();
-        IDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        positionCoulmn.setCellValueFactory(new PropertyValueFactory<>("position"));
-        for (TicketingOfficer officer : officers) {
-            officerTable.getItems().add(officer);
-        }
-        officerTable.setOnMouseClicked((event) -> {
-            TicketingOfficer officer = (TicketingOfficer) officerTable.getSelectionModel().getSelectedItem();
-            firstNameLabel.setText(officer.getFirstName());
-            lastNameLabel.setText(officer.getLastName());
-            salaryLabel.setText(officer.getSalary() + "");
-            phoneNumberLabel.setText(officer.getPhoneNumber());
-            addressLabel.setText(officer.getAddress());
-
-        });
+        prepareColumns();
+        populateTable();
+        prepareTable();
     }
 
     private void  isInitialized(){

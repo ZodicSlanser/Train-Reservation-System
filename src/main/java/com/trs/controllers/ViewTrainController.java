@@ -1,38 +1,34 @@
 package com.trs.controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import com.trs.api.managers.TrainManager;
+import com.trs.modules.TicketingOfficer;
+import com.trs.modules.Train;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ViewTrainController extends FormNavigator implements Initializable {
 
-  public  ViewTrainController(){
+    public  ViewTrainController(){
         super();
     }
 
-    private int trainNumber;
-    private String type;
-    private String departureDate;
-    private String departureHour;
-    private String departureMinute;
-    private String arrivalDate;
-    private String arrivalHour;
-    private String arrivalMinute;
-    private String departureStation;
-    private String arrivalStation;
-    private Timestamp departureDateTime;
-    private Timestamp arrivalDateTime;
-    private int maximumCapacity;
-    private int currentCapacity;
+    public static boolean editTrigger;
+    public static Train selectedTrain;
+    public static boolean adminTrigger;
     @FXML
-    private Label ArrivalStationL;
+    private Label arrivalStationL;
+    @FXML
+    public Button viewTickets;
     @FXML
     private Label arrivalTimeL;
     @FXML
@@ -57,23 +53,72 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     private TableView trainTable;
     @FXML
     private TableColumn trainTypeColumn;
-
     @FXML
-    public void viewSelectActionPage(ActionEvent actionEvent) {
-
+    public Label currentCapacityLabel;
+    @FXML
+    public void viewSelectActionPage(ActionEvent actionEvent) throws IOException {
+        if(!adminTrigger) {
+            navigateTo(actionEvent, "/com/trs/forms/OfficerActionPage.fxml");
+            return;
+        }
+        navigateTo(actionEvent, "/com/trs/forms/AdminActionPage.fxml");
     }
 
+    @FXML
+    public void ViewTicketsTrainPage(ActionEvent actionEvent) throws IOException {
+        if (trainTable.getSelectionModel().getSelectedItem() != null) {
+            ViewTicketsController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
+            ViewTicketsController.setTrainNumber(selectedTrain);
+            navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
+        }
+    }
     @FXML
     void deleteSelectedTrain(ActionEvent event) {
-
+        if (trainTable.getSelectionModel().getSelectedItem() == null) {
+            Alert err = new Alert(Alert.AlertType.ERROR, "Please select a train to delete", ButtonType.OK);
+            err.showAndWait();
+            return;
+        }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this train?", ButtonType.YES, ButtonType.NO);
+        confirm.showAndWait();
+        if (confirm.getResult() == ButtonType.YES) {
+            try {
+                TrainManager.deleteTrain((Train) trainTable.getSelectionModel().getSelectedItem());
+                trainTable.getItems().remove(trainTable.getSelectionModel().getSelectedItem());
+                Alert info = new Alert(Alert.AlertType.INFORMATION, "train deleted successfully", ButtonType.OK);
+                clearTextLabels();
+                info.showAndWait();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void clearTextLabels(){
+        arrivalStationL.setText("");
+        arrivalTimeL.setText("");
+        departureStationL.setText("");
+        departureTimeL.setText("");
+        maximumCapacityL.setText("");
+        priceL.setText("");
+        currentCapacityLabel.setText("");
     }
 
-    public void viewAddTrainPage(ActionEvent actionEvent) {
+    public void viewAddTrainPage(ActionEvent actionEvent) throws IOException {
+        navigateTo(actionEvent, "/com/trs/forms/ManageTrain.fxml");
 
     }
 
     @FXML
     public void viewEditTrainPage(ActionEvent actionEvent) {
+        if (trainTable.getSelectionModel().getSelectedItem() != null) {
+            ManageTrainController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
+            ManageTrainController.editTrigger = true;
+            try {
+                navigateTo(actionEvent, "/com/trs/forms/ManageTrain.fxml");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -88,14 +133,41 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         return ManageTrainController.getTimestamp(date, hour, minute);
     }
 
-    @FXML
-    void initialize() {
-        isInitialized();
+    void populateTable() {
+        try {
+            ArrayList<Train> trains = (ArrayList<Train>) TrainManager.getAllTrains();
 
+            for (Train train : trains) {
+                trainTable.getItems().add(train);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    void prepareColumns(){
+        trainNumberColumn.setCellValueFactory(new PropertyValueFactory<>("trainNumber"));
+        trainTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
     }
+
+    void prepareTable(){
+        trainTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                Train train = (Train) newSelection;
+                departureStationL.setText(train.getDepartureStation());
+                arrivalStationL.setText(train.getArrivalStation());
+                departureTimeL.setText(train.getDepartureTime().toString());
+                arrivalTimeL.setText(train.getArrivalTime().toString());
+                maximumCapacityL.setText(String.valueOf(train.getMaximumCapacity()));
+                priceL.setText(String.valueOf(train.getPrice()));
+                currentCapacityLabel.setText(String.valueOf(train.getCurrentCapacity()));
+            }
+        });
+    }
+
+
     private void  isInitialized(){
-        assert ArrivalStationL != null : "fx:id=\"ArrivalStationL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
+        assert arrivalStationL != null : "fx:id=\"arrivalStationL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert arrivalTimeL != null : "fx:id=\"arrivalTimeL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert backBtn != null : "fx:id=\"backBtn\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert departureStationL != null : "fx:id=\"departureStationL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
@@ -108,7 +180,14 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     }
 
     @Override
+    @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isInitialized();
+        populateTable();
+        prepareColumns();
+        prepareTable();
     }
+
+
+
 }

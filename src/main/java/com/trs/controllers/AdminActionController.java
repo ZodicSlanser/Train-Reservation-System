@@ -40,7 +40,8 @@ public class AdminActionController extends FormNavigator implements Initializabl
 
     @FXML
     void viewTicket(ActionEvent event) throws IOException {
-        navigateTo(event, "/com/trs/forms/ViewTicket.fxml");
+        ViewTicketsController.adminTrigger = true;
+        navigateTo(event, "/com/trs/forms/ViewTickets.fxml");
 
     }
 
@@ -49,6 +50,8 @@ public class AdminActionController extends FormNavigator implements Initializabl
         navigateTo(event, "/com/trs/forms/ViewTrain.fxml");
 
     }
+
+
 
     public void isInitialized() {
         assert manageTrainButton != null : "fx:id=\"manageTrainButton\" was not injected: check your FXML file 'AdminActionPage.fxml'.";
