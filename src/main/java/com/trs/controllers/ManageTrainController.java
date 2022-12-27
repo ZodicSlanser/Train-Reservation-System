@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class ManageTrainController {
+public class ManageTrainController extends FormNavigator implements Initializable {
 
     private int trainNumber;
     private String type;
@@ -64,10 +65,12 @@ public class ManageTrainController {
     }
 
     public void viewAddTrainPage(ActionEvent actionEvent) {
+
     }
 
     @FXML
     public void viewEditTrainPage(ActionEvent actionEvent) {
+
     }
 
     //method to turn the date and time into a timestamp
@@ -101,5 +104,8 @@ public class ManageTrainController {
     }
 
 
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        isInitialized();
+    }
 }

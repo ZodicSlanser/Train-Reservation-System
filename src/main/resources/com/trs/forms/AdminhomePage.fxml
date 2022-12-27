@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="688.0" fitWidth="827.0" pickOnBounds="true">
          <image>
-            <Image url="@../images/AdminhomePage.jpg" />
+            <Image url="@../images/AdminHomePage.jpg" />
          </image>
       </ImageView>
       <Label layoutX="312.0" layoutY="49.0" text="Select Action" textFill="WHITE">
