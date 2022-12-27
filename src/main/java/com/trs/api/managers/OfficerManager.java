@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfficerManager extends CRUD {
-    private final static List<String> OFFICER_COLUMNS = List.of("AID", "salary", "FName", "LName", "PhoneNumber", "Address");
+    public static ArrayList<Integer> OfficerIDs = new ArrayList<>();
+    private final static List<String> OFFICER_COLUMNS = List.of("AID", "salary", "FName", "LName", "PhoneNumber", "Address", "username", "password","type");
 
     public OfficerManager() {
         super();
@@ -18,6 +19,7 @@ public class OfficerManager extends CRUD {
 
     // a method that fixes the syntax of the TicketingOfficer  values in the list
     private static List<String> getOfficerValues(TicketingOfficer officer) {
+       int type = officer.getPosition().equals("System Admin")? 0 : 1;
         return List.of(
                 "'" + officer.getId() + "'",
                 String.valueOf(officer.getSalary()),
@@ -25,9 +27,14 @@ public class OfficerManager extends CRUD {
                 "'" + officer.getLastName() + "'",
                 "'" + officer.getPhoneNumber() + "'",
                 "'" + officer.getAddress() + "'",
-                "`" + officer.getUsername() + "'",
-                "'" + officer.getPassword() + "'"
+                "'" + officer.getUsername() + "'",
+                "'" + officer.getPassword() + "'",
+                "'" + type + "'"
         );
+    }
+
+    public static boolean IDExists(int id) {
+        return OfficerIDs.contains(id);
     }
 
     //a method that deletes everything in the table
@@ -45,6 +52,7 @@ public class OfficerManager extends CRUD {
         List<TicketingOfficer> ticketingOfficers = new ArrayList<>();
         ResultSet rs = getAll("officers");
         while (rs.next()) {
+            OfficerIDs.add(rs.getInt("AID"));
             switch (rs.getInt("Type")) {
                 case 1 ->
                         ticketingOfficers.add(new TicketingOfficer(rs.getInt("AID"),
@@ -64,6 +72,7 @@ public class OfficerManager extends CRUD {
                                 rs.getString("Address"),
                         rs.getString("username"),
                         rs.getString("password")));
+
             }
         }
         return ticketingOfficers;
@@ -78,15 +87,16 @@ public class OfficerManager extends CRUD {
 
     //a method that returns a TicketingOfficer with a specific username and password
     public TicketingOfficer getTicketingOfficer(String username, String password, int type) throws SQLException {
-        ResultSet rs = get("officers", "username",username + "And password = " + password + " type = " + type );
-        assert rs != null;
+        ResultSet rs = get("officers", "*"," `username` = " + "'" + username + "'" + " and `password` = " + "'" + password + "'" + " and `type` = " + type );
+        assert rs != null : "No Ticketing Officer with this username and password";
         return setOfficerType(rs);
     }
 
     //a method to set officer type
     private TicketingOfficer setOfficerType(ResultSet rs) throws SQLException {
         if (rs.next()) {
-            switch (rs.getInt("Type")) {
+            System.out.println(rs.getInt("type"));
+            switch (rs.getInt("type")) {
                 case 1 -> {
                     return new TicketingOfficer(rs.getInt("AID"),
                             rs.getString("FName"),
