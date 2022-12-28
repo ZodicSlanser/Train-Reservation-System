@@ -77,7 +77,7 @@ public class TrainManager extends CRUD {
     //a method that returns a single train from database
     public Train getTrain(int number) throws SQLException {
         if (isConnected()) {
-            ResultSet rs = get("trains", "Number", String.valueOf(number));
+            ResultSet rs = get("trains", "*","number = " + number);
             if (rs.next()) {
                 return getTrain(rs);
             }

@@ -27,18 +27,18 @@ public class OfficerActionController extends FormNavigator implements Initializa
 
     @FXML
     void addTicketHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "com/trs/forms/ReserveTicket.fxml");
+        navigateTo(event, "/com/trs/forms/ReserveTicket.fxml");
     }
 
     @FXML
     void exitHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "com/trs/forms/Login.fxml");
+        navigateTo(event, "/com/trs/forms/Login.fxml");
 
     }
 
     @FXML
     void viewTrainHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "com/trs/forms/ViewTrain.fxml");
+        navigateTo(event, "/com/trs/forms/ViewTrain.fxml");
     }
 
     @FXML

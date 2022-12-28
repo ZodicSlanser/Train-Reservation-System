@@ -180,8 +180,6 @@ public class ManageOfficerController extends FormNavigator implements Initializa
         IDTextField.clear();
     }
 
-
-
     void isInitialized() {
         assert firstNameTextField != null : "fx:id=\"firstNameTextField\" was not injected: check your FXML file 'ManageOfficer.fxml'.";
         assert lastNameTextField != null : "fx:id=\"lastNameTextField\" was not injected: check your FXML file 'ManageOfficer.fxml'.";

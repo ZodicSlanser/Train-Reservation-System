@@ -1,5 +1,6 @@
 package com.trs.controllers;
 
+import com.trs.api.managers.TicketManager;
 import com.trs.api.managers.TrainManager;
 import com.trs.modules.SystemAdmin;
 import com.trs.modules.Train;
@@ -10,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +32,8 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     public DatePicker reservationDatePicker;
     public ComboBox trainPickerComboBox;
     static Train selectedTrain;
+    static boolean reserveTrigger;
+    private Train trainFromComboBox;
     int number;
     int trainNumber;
     String degree;
@@ -62,20 +66,34 @@ public class ReserveTicketController extends FormNavigator implements Initializa
 
     @FXML
     void backHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "AdminActionPage.fxml");
+        if(LoginController.IsAdmin()) {
+            navigateTo(event, "/com/trs/forms/AdminActionPage.fxml");
+            return;
+        }
+        navigateTo(event,"/com/trs/forms/OfficerActionPage.fxml");
     }
+
     @FXML
     void bookHandle(ActionEvent event) throws SQLException {
+        System.out.println(reservationDatePicker.getValue().toString());
         int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
         int price = Integer.parseInt(singlePriceTextField.getText());
         getValuesFromFields();
-        switch (degree) {
-            case "First Class" ->
-                    new SystemAdmin().bookTicket(new FirstClassTicket(String.valueOf(Math.random() * 10), price / numberOfTickets, trainNumber, date), new SystemAdmin().findTrain(trainNumber));
-            case "Second Class" ->
-                    new SystemAdmin().bookTicket(new SecondClasssTicket(String.valueOf(Math.random() * 10), price / numberOfTickets, trainNumber, date), new SystemAdmin().findTrain(trainNumber));
-            case "Third Class" ->
-                    new SystemAdmin().bookTicket(new ThirdClassTicket(String.valueOf(Math.random() * 10), price / numberOfTickets, trainNumber,date), new SystemAdmin().findTrain(trainNumber));
+        for(int i = 0; i < numberOfTickets; i++) {
+            switch (degree) {
+                case "First Class" -> new SystemAdmin().bookTicket(
+                        new FirstClassTicket(TicketManager.generateTicketID(trainNumber),
+                        price / numberOfTickets, trainNumber, date),
+                        new SystemAdmin().findTrain(trainNumber));
+                case "Second Class" -> new SystemAdmin().bookTicket(
+                        new SecondClasssTicket(TicketManager.generateTicketID(trainNumber),
+                        price / numberOfTickets, trainNumber, date),
+                        new SystemAdmin().findTrain(trainNumber));
+                case "Third Class" -> new SystemAdmin().bookTicket(
+                        new ThirdClassTicket(TicketManager.generateTicketID(trainNumber),
+                        price / numberOfTickets, trainNumber, date),
+                        new SystemAdmin().findTrain(trainNumber));
+            }
         }
     }
 
@@ -88,6 +106,11 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     void initializeComboBoxes () throws SQLException {
         degreeComboBox.getItems().addAll("First Class", "Second Class", "Third Class");
         degreeComboBox.getSelectionModel().select(0);
+        if(reserveTrigger){
+            trainPickerComboBox.getItems().add(selectedTrain.getTrainNumber());
+            trainPickerComboBox.setValue(selectedTrain.getTrainNumber());
+            return;
+        }
         trainPickerComboBox.getItems().addAll(trainIDs);
         trainPickerComboBox.getSelectionModel().select(0);
     }
@@ -96,7 +119,6 @@ public class ReserveTicketController extends FormNavigator implements Initializa
         String degree = degreeComboBox.getValue().toString();
         int trainNumber = Integer.parseInt(trainPickerComboBox.getValue().toString());
         Train train = new SystemAdmin().findTrain(trainNumber);
-
         switch (degree) {
             case "First Class" -> singlePriceTextField.setText(String.valueOf(train.getPrice() * 3));
             case "Second Class" -> singlePriceTextField.setText(String.valueOf(train.getPrice() * 2));
@@ -104,16 +126,17 @@ public class ReserveTicketController extends FormNavigator implements Initializa
         }
     }
 
-
-    void getValuesFromFields(){
-        number = trainPickerComboBox.getSelectionModel().getSelectedIndex();
-        trainNumber = Integer.parseInt(trainPickerComboBox.getValue().toString());
-        degree = degreeComboBox.getValue().toString();
-        date =  Date.valueOf(reservationDatePicker.getValue().toString());
-        price = singlePriceTextField.getText();
+    //change the price of the ticket according to the train
+    @FXML
+    void trainPickerComboBoxHandle(ActionEvent event) throws SQLException {
+        setTicketClassPrice();
+        updateTotalPrice();
     }
-
-
+    @FXML
+    void classPickerComboBoxHandle(ActionEvent event) throws SQLException {
+        setTicketClassPrice();
+        updateTotalPrice();
+    }
 
     @Override
     @FXML
@@ -122,12 +145,12 @@ public class ReserveTicketController extends FormNavigator implements Initializa
             isInitialized();
             getAllTrainIDs();
             initializeComboBoxes();
+            getValuesFromFields();
+            setTicketClassPrice();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 
     void isInitialized(){
         assert label != null : "fx:id=\"label\" was not injected: check your FXML file 'ReserveTicket.fxml'.";
@@ -139,6 +162,32 @@ public class ReserveTicketController extends FormNavigator implements Initializa
         assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'ReserveTicket.fxml'.";
 
     }
+    //a method to get all values from the fields
+    void getValuesFromFields() {
+        try {
+            number = trainPickerComboBox.getSelectionModel().getSelectedIndex();
+            trainNumber = Integer.parseInt(trainPickerComboBox.getValue().toString());
+            degree = degreeComboBox.getValue().toString();
+            date = Date.valueOf(reservationDatePicker.getValue().toString());
+            price = singlePriceTextField.getText();
+        }
+        catch (NullPointerException ignored){}
 
+    }
+
+    public void updateTotalPrice(){
+        if(!ticketsNumberTextField.getText().isEmpty() && !ticketsNumberTextField.getText().isBlank()) {
+            int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
+            int price = Integer.parseInt(singlePriceTextField.getText());
+            totalPriceLabel.setText(String.valueOf(numberOfTickets * price));
+            return;
+        }
+        totalPriceLabel.setText("0");
+    }
+    @FXML
+    public void HandleTotalPrice(KeyEvent keyEvent) {
+        updateTotalPrice();
+
+    }
 
 }

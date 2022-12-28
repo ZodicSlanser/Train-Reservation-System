@@ -2,6 +2,7 @@ package com.trs.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -10,9 +11,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ManageTicketsController {
-
-
+public class ManageTicketsController extends FormNavigator implements Initializable {
     int numberOfTickets;
     @FXML
     private ResourceBundle resources;
@@ -44,10 +43,10 @@ public class ManageTicketsController {
     void editHandel(ActionEvent event) {
 
     }
-
+    @Override
     @FXML
-    void initialize() {
-
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        isInitialized();
 
     }
 
@@ -62,4 +61,5 @@ public class ManageTicketsController {
         assert reserveDateTimePicker != null : "fx:id=\"reserveDateTimePicker\" was not injected: check your FXML file 'ManageTickets.fxml'.";
 
     }
+
 }

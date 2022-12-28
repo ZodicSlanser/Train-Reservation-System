@@ -17,11 +17,9 @@ import java.util.ResourceBundle;
 
 public class ViewTrainController extends FormNavigator implements Initializable {
 
-    public static boolean editTrigger;
+
     public static Train selectedTrain;
     public static boolean adminTrigger;
-    @FXML
-    public Button viewTickets;
     @FXML
     public Button addTrainBtn;
     @FXML
@@ -30,6 +28,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     public Button deleteTrainBtn;
     @FXML
     public Label currentCapacityLabel;
+    public Button reserveTicket;
     @FXML
     private Label arrivalStationL;
     @FXML
@@ -53,10 +52,15 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     public ViewTrainController() {
         super();
     }
+  private static  boolean isTrain;
+    public static boolean IsTrain() {
+
+        return isTrain;
+    }
 
     @FXML
     public void viewSelectActionPage(ActionEvent actionEvent) throws IOException {
-        if (!adminTrigger) {
+        if (!LoginController.IsAdmin()) {
             navigateTo(actionEvent, "/com/trs/forms/OfficerActionPage.fxml");
             return;
         }
@@ -68,6 +72,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         if (trainTable.getSelectionModel().getSelectedItem() != null) {
             ViewTicketsController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
             ViewTicketsController.setTrainNumber(selectedTrain);
+            isTrain = true;
             navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
         }
     }
@@ -184,7 +189,13 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         assert trainTable != null : "fx:id=\"trainTable\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert trainTypeColumn != null : "fx:id=\"trainTypeColumn\" was not injected: check your FXML file 'ViewTrain.fxml'.";
     }
-
+    void setPrivileges() {
+        if (!LoginController.IsAdmin()) {
+            addTrainBtn.setDisable(true);
+            editTrainBtn.setDisable(true);
+            deleteTrainBtn.setDisable(true);
+        }
+    }
     @Override
     @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -192,7 +203,21 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         populateTable();
         prepareColumns();
         prepareTable();
+        setPrivileges();
     }
 
 
+    public void handleTicketReserve(ActionEvent actionEvent) {
+        if (trainTable.getSelectionModel().getSelectedItem() != null) {
+            ReserveTicketController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
+            ViewTicketsController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
+            ReserveTicketController.reserveTrigger = true;
+            ViewTicketsController.trainTrigger = true;
+            try {
+                navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

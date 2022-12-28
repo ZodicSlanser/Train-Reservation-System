@@ -39,6 +39,10 @@ public class LoginController extends FormNavigator implements Initializable {
         super();
     }
 
+    public static void setIsAdmin(boolean b) {
+        isAdmin = b;
+    }
+
     private boolean isTextEmpty() {
         return usernameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty();
     }
@@ -63,6 +67,11 @@ public class LoginController extends FormNavigator implements Initializable {
                 passwordTextField.setDisable(false);});}).start();
     }
 
+    private static boolean isAdmin = false;
+
+    public static boolean IsAdmin() {
+        return isAdmin;
+    }
     @FXML
     public void processLogin(ActionEvent actionEvent) throws SQLException, InterruptedException, IOException {
         if (tryCounter == 2) {
@@ -87,8 +96,10 @@ public class LoginController extends FormNavigator implements Initializable {
         }
         if (type == 0) {
             navigateTo(actionEvent, "/com/trs/forms/AdminActionPage.fxml");
+            isAdmin = true;
         } else {
             navigateTo(actionEvent, "/com/trs/forms/OfficerActionPage.fxml");
+            isAdmin = false;
         }
 
     }

@@ -1,5 +1,6 @@
 package com.trs;
 
+import com.trs.api.managers.TicketManager;
 import com.trs.controllers.FormNavigator;
 import com.trs.modules.Train;
 import javafx.application.Application;
@@ -15,11 +16,7 @@ public class Runner extends Application {
     public void start(Stage stage) throws Exception {
         Parent loginParent = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/Login.fxml")));
         Scene loginScene = new Scene(loginParent);
-        ;
         stage.setScene(loginScene);
         stage.show();
-        Train t;
-
-
     }
 }

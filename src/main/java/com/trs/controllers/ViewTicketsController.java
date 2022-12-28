@@ -18,12 +18,10 @@ import java.util.ResourceBundle;
 import static com.trs.controllers.FormNavigator.navigateTo;
 
 public class ViewTicketsController {
-
-
     static Ticket selectedTicket;
     static boolean editTrigger;
     static boolean adminTrigger;
-    static Train selectedTrain;
+   public static Train selectedTrain;
     static boolean trainTrigger;
     @FXML
     public Label PriceLabel;
@@ -54,6 +52,11 @@ public class ViewTicketsController {
     @FXML
     private Button backButton;
 
+   public ViewTicketsController() {
+        super();
+        adminTrigger = LoginController.IsAdmin();
+        trainTrigger = ViewTrainController.IsTrain();
+    }
     public static void setTrainNumber(Train train) {
         selectedTrain = train;
     }
@@ -74,7 +77,7 @@ public class ViewTicketsController {
         confirm.showAndWait();
         if (confirm.getResult() == ButtonType.YES) {
             try {
-                TrainManager.deleteTrain((Train) ticketTable.getSelectionModel().getSelectedItem());
+                TicketManager.removeTicket((Ticket) ticketTable.getSelectionModel().getSelectedItem());
                 ticketTable.getItems().remove(ticketTable.getSelectionModel().getSelectedItem());
                 Alert info = new Alert(Alert.AlertType.INFORMATION, "ticket deleted successfully", ButtonType.OK);
                 clearLabels();
@@ -87,23 +90,31 @@ public class ViewTicketsController {
 
     @FXML
     void editHandle(ActionEvent event) throws IOException {
+        if (ticketTable.getSelectionModel().getSelectedItem() == null) {
+            Alert err = new Alert(Alert.AlertType.ERROR, "Please select a ticket to edit", ButtonType.OK);
+            err.showAndWait();
+            return;
+        }
         editTrigger = true;
+        selectedTicket = (Ticket) ticketTable.getSelectionModel().getSelectedItem();
         navigateTo(event, "/com/trs/forms/ManageTickets.fxml");
+
 
     }
 
     @FXML
     void newHandle(ActionEvent event) throws IOException {
         navigateTo(event, "/com/trs/forms/ReserveTicket.fxml");
-
     }
 
     void populateTable() {
         try {
-            ArrayList<Ticket> tickets = (ArrayList<Ticket>) TicketManager.getAllTickets();
-            for (Ticket ticket : tickets) {
-                ticketTable.getItems().add(ticket);
+            if (trainTrigger) {
+                ticketTable.getItems().addAll(selectedTrain.getAllTrainTickets());
+                return;
             }
+            ArrayList<Ticket> tickets = (ArrayList<Ticket>) TicketManager.getAllTickets();
+                ticketTable.getItems().addAll(tickets);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -120,8 +131,12 @@ public class ViewTicketsController {
                 selectedTicket = (Ticket) newSelection;
                 trainNumberLabel.setText(selectedTicket.getTrainNumber() + "");
                 reservationDateLabel.setText(selectedTicket.getReservationDate().toString());
-                degreeLabel.setText(String.valueOf(selectedTicket.getTicketClass()));
-                FareLabel.setText(String.valueOf(selectedTicket.getFare()));
+                switch (selectedTicket.getTicketClass()) {
+                    case 1 -> degreeLabel.setText("First Class");
+                    case 2 -> degreeLabel.setText("Second Class");
+                    case 3 -> degreeLabel.setText("Third Class");
+                }
+                PriceLabel.setText(String.valueOf(selectedTicket.getFare()));
             }
         });
     }
@@ -133,6 +148,14 @@ public class ViewTicketsController {
         PriceLabel.setText("");
     }
 
+    void setPrivileges() {
+        if (!LoginController.IsAdmin()) {
+            newButton.setDisable(true);
+            editButton.setDisable(true);
+            deleteButton.setDisable(true);
+        }
+    }
+
     @FXML
     void initialize() {
         isInitialized();
@@ -140,6 +163,7 @@ public class ViewTicketsController {
         populateTable();
         prepareTable();
         clearLabels();
+        setPrivileges();
     }
 
     void isInitialized() {

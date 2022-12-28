@@ -26,6 +26,7 @@ public class AdminActionController extends FormNavigator implements Initializabl
 
     @FXML
     void exit(ActionEvent event) throws IOException {
+        LoginController.setIsAdmin(false);
         navigateTo(event, "/com/trs/forms/Login.fxml");
 
     }

@@ -23,7 +23,7 @@ public class TicketManager extends CRUD {
                 "'" + ticket.getTicketNumber() + "'",
                 String.valueOf(ticket.getFare()),
                 String.valueOf(ticket.getTrainNumber()),
-                ticket.getReservationDate().toString(),
+                "' " + ticket.getReservationDate().toString() + "'",
                 "'" + ticket.getTicketClass() + "'"
         );
     }
@@ -51,13 +51,15 @@ public class TicketManager extends CRUD {
     private static Ticket getTicket(ResultSet rs) throws SQLException {
         switch (rs.getInt("Class")) {
             case 1 -> {
-                return new FirstClassTicket(rs.getString("ticketNumber"),
+                return new FirstClassTicket(
+                        rs.getString("ticketNumber"),
                         rs.getInt("Fare"),
                         rs.getInt("trainNumber"),
                         rs.getDate("Reservation"));
             }
             case 2 -> {
-                return new SecondClasssTicket(rs.getString("ticketNumber"),
+                return new SecondClasssTicket
+                        (rs.getString("ticketNumber"),
                         rs.getInt("Fare"),
                         rs.getInt("trainNumber"),
                         rs.getDate("Reservation"));
@@ -73,7 +75,7 @@ public class TicketManager extends CRUD {
     }
     static public List<Ticket> getTrainTickets(String number) throws SQLException {
         List<Ticket> tickets = new ArrayList<>();
-        ResultSet rs = get("tickets", "*", number);
+        ResultSet rs = get("tickets", "*","trainNumber = " + number);
         assert rs != null;
         while (rs.next()) {
            tickets.add(getTicket(rs));
@@ -90,8 +92,8 @@ public class TicketManager extends CRUD {
         return null;
     }
     //a method that removes a Ticket from database
-    public void removeTicket(Ticket ticket) throws SQLException {
-        deleteWhereEqual("tickets", "Number", ticket.getTicketNumber());
+    public static void removeTicket(Ticket ticket) throws SQLException {
+        deleteWhereEqual("tickets", "ticketNumber", ticket.getTicketNumber());
     }
 
     //a method that adds a Ticket to database
@@ -104,11 +106,18 @@ public class TicketManager extends CRUD {
         update("tickets", TICKET_COLUMNS, getTicketValues(ticket), " ticketNumber = " + ticket.getTicketNumber());
     }
 
+    //generate a random number from 100 to 999
+    private static int generateTicketNumber(int trainNumber) {
+        return Integer.parseInt( "" + trainNumber +""+ ((int) (Math.random() * 900) + 100));
+    }
     //a method that removes all Tickets from database
-    public void deleteAll() throws SQLException {
+    public static void deleteAll() throws SQLException {
         prune("tickets");
     }
 
+    public static String generateTicketID(int trainNumber){
+            return String.valueOf(generateTicketNumber(trainNumber));
+    }
 
 }
 

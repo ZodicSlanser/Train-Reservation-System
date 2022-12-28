@@ -185,12 +185,23 @@ public class ManageTrainController extends FormNavigator implements Initializabl
     }
 
     private boolean checkFields() {
-        return !trainNumberTextField.getText().isEmpty() && !departureStationTextField.getText().isEmpty() && !arrivalStationTextField.getText().isEmpty() && !departureDatePicker.getValue().toString().isEmpty() && !departureHourTextField.getText().isEmpty() && !departureMinuteTextField.getText().isEmpty() && !arrivalDatePicker.getValue().toString().isEmpty() && !arrivalHourTextField.getText().isEmpty() && !arrivalMinuteTextField.getText().isEmpty() && !maxCapacityTextField.getText().isEmpty() && !standardPriceTextField.getText().isEmpty() && !typeTextField.getText().isEmpty();
+        return !trainNumberTextField.getText().isEmpty() &&
+                !departureStationTextField.getText().isEmpty() &&
+                !arrivalStationTextField.getText().isEmpty() &&
+                !departureDatePicker.getValue().toString().isEmpty() &&
+                !departureHourTextField.getText().isEmpty() &&
+                !departureMinuteTextField.getText().isEmpty() &&
+                !arrivalDatePicker.getValue().toString().isEmpty() &&
+                !arrivalHourTextField.getText().isEmpty() &&
+                !arrivalMinuteTextField.getText().isEmpty() &&
+                !maxCapacityTextField.getText().isEmpty() &&
+                !standardPriceTextField.getText().isEmpty() &&
+                !typeTextField.getText().isEmpty();
     }
 
     @FXML
     public void exitHandle(ActionEvent actionEvent) throws IOException {
-        if (adminTrigger)
+        if (LoginController.IsAdmin())
             ViewTrainController.adminTrigger = true;
         navigateTo(actionEvent, "/com/trs/forms/ViewTrain.fxml");
 
