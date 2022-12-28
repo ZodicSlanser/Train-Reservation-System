@@ -1,29 +1,28 @@
 package com.trs.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class AdminActionController extends FormNavigator implements Initializable {
 
-   public AdminActionController(){
-        super();
-    }
     @FXML
     private Button manageTrainButton;
-
     @FXML
     private Button manageTicketButton;
-
     @FXML
     private Button manageOfficerButton;
-
     @FXML
     private Button exitButton;
+
+    public AdminActionController() {
+        super();
+    }
 
     @FXML
     void exit(ActionEvent event) throws IOException {
@@ -50,7 +49,6 @@ public class AdminActionController extends FormNavigator implements Initializabl
         navigateTo(event, "/com/trs/forms/ViewTrain.fxml");
 
     }
-
 
 
     public void isInitialized() {

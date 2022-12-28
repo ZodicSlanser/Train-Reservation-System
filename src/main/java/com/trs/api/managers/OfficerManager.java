@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfficerManager extends CRUD {
+    private final static List<String> OFFICER_COLUMNS = List.of("AID", "salary", "FName", "LName", "PhoneNumber", "Address", "username", "password", "type");
     public static ArrayList<Integer> OfficerIDs = new ArrayList<>();
-    private final static List<String> OFFICER_COLUMNS = List.of("AID", "salary", "FName", "LName", "PhoneNumber", "Address", "username", "password","type");
 
     public OfficerManager() {
         super();
@@ -19,7 +19,7 @@ public class OfficerManager extends CRUD {
 
     // a method that fixes the syntax of the TicketingOfficer  values in the list
     private static List<String> getOfficerValues(TicketingOfficer officer) {
-       int type = officer.getPosition().equals("System Admin")? 0 : 1;
+        int type = officer.getPosition().equals("System Admin") ? 0 : 1;
         return List.of(
                 "'" + officer.getId() + "'",
                 String.valueOf(officer.getSalary()),
@@ -47,33 +47,40 @@ public class OfficerManager extends CRUD {
         throw new SQLException("Connection to the database failed.");
     }
 
+    //a method that takes a result set and returns a ticketing officer
+    private static TicketingOfficer getOfficer(ResultSet rs) throws SQLException {
+            int type = rs.getInt("type");
+            if (type == 0) {
+                return new SystemAdmin(rs.getInt("AID"),
+                        rs.getString("FName"),
+                        rs.getString("LName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getInt("salary"),
+                        rs.getString("Address"),
+                        rs.getString("username"),
+                        rs.getString("password")
+                );
+            } else {
+                return new TicketingOfficer(rs.getInt("AID"),
+                        rs.getString("FName"),
+                        rs.getString("LName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getInt("salary"),
+                        rs.getString("Address"),
+                        rs.getString("username"),
+                        rs.getString("password")
+                       );
+            }
+    }
+
+
     //a method that returns all TicketingOfficer from database
     public List<TicketingOfficer> getAllTicketingOfficers() throws SQLException {
         List<TicketingOfficer> ticketingOfficers = new ArrayList<>();
         ResultSet rs = getAll("officers");
         while (rs.next()) {
             OfficerIDs.add(rs.getInt("AID"));
-            switch (rs.getInt("Type")) {
-                case 1 ->
-                        ticketingOfficers.add(new TicketingOfficer(rs.getInt("AID"),
-                                rs.getString("FName"),
-                                rs.getString("LName"),
-                                rs.getString("PhoneNumber"),
-                                rs.getInt("salary"),
-                                rs.getString("Address"),
-                                rs.getString("username"),
-                                rs.getString("password")));
-                case 0 ->
-                        ticketingOfficers.add(new SystemAdmin(rs.getInt("AID"),
-                                rs.getString("FName"),
-                                rs.getString("LName"),
-                                rs.getString("PhoneNumber"),
-                                rs.getInt("salary"),
-                                rs.getString("Address"),
-                        rs.getString("username"),
-                        rs.getString("password")));
-
-            }
+            ticketingOfficers.add(getOfficer(rs));
         }
         return ticketingOfficers;
     }
@@ -82,45 +89,25 @@ public class OfficerManager extends CRUD {
     public TicketingOfficer getTicketingOfficer(int AID) throws SQLException {
         ResultSet rs = get("officers", "AID", String.valueOf(AID));
         assert rs != null;
-        return setOfficerType(rs);
+        return getOfficer(rs);
     }
 
     //a method that returns a TicketingOfficer with a specific username and password
     public TicketingOfficer getTicketingOfficer(String username, String password, int type) throws SQLException {
-        ResultSet rs = get("officers", "*"," `username` = " + "'" + username + "'" + " and `password` = " + "'" + password + "'" + " and `type` = " + type );
+        ResultSet rs = get("officers", "*", " `username` = " + "'" + username + "'" + " and `password` = " + "'" + password + "'" + " and `type` = " + type);
         assert rs != null : "No Ticketing Officer with this username and password";
-        return setOfficerType(rs);
-    }
-
-    //a method to set officer type
-    private TicketingOfficer setOfficerType(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            System.out.println(rs.getInt("type"));
-            switch (rs.getInt("type")) {
-                case 1 -> {
-                    return new TicketingOfficer(rs.getInt("AID"),
-                            rs.getString("FName"),
-                            rs.getString("LName"),
-                            rs.getString("PhoneNumber"),
-                            rs.getInt("salary"),
-                            rs.getString("Address"),
-                            rs.getString("username"),
-                            rs.getString("password"));
-                }
-                case 0 -> {
-                    return new SystemAdmin(rs.getInt("AID"),
-                            rs.getString("FName"),
-                            rs.getString("LName"),
-                            rs.getString("PhoneNumber"),
-                            rs.getInt("salary"),
-                            rs.getString("Address"),
-                            rs.getString("username"),
-                            rs.getString("password"));
-                }
+        if(rs.next()) {
+            System.out.println("Ticketing Officer found");
+            System.out.println(rs.getString("FName"));
+            if(getOfficer(rs) != null) {
+                return getOfficer(rs);
             }
+            System.out.println("Ticketing Officer not found");
         }
         return null;
     }
+
+
     //a method that inserts a TicketingOfficer into the database
     public void insertTicketingOfficer(TicketingOfficer ticketingOfficer) throws SQLException {
         if (isConnected()) {

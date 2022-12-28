@@ -1,14 +1,6 @@
 package com.trs.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import com.trs.api.managers.TrainManager;
-import com.trs.modules.TicketingOfficer;
 import com.trs.modules.Train;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,19 +8,30 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class ViewTrainController extends FormNavigator implements Initializable {
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-    public  ViewTrainController(){
-        super();
-    }
+public class ViewTrainController extends FormNavigator implements Initializable {
 
     public static boolean editTrigger;
     public static Train selectedTrain;
     public static boolean adminTrigger;
     @FXML
-    private Label arrivalStationL;
-    @FXML
     public Button viewTickets;
+    @FXML
+    public Button addTrainBtn;
+    @FXML
+    public Button editTrainBtn;
+    @FXML
+    public Button deleteTrainBtn;
+    @FXML
+    public Label currentCapacityLabel;
+    @FXML
+    private Label arrivalStationL;
     @FXML
     private Label arrivalTimeL;
     @FXML
@@ -37,12 +40,6 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     private Label departureStationL;
     @FXML
     private Label departureTimeL;
-    @FXML
-    public Button addTrainBtn;
-    @FXML
-    public Button editTrainBtn;
-    @FXML
-    public Button deleteTrainBtn;
     @FXML
     private Label maximumCapacityL;
     @FXML
@@ -53,11 +50,13 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     private TableView trainTable;
     @FXML
     private TableColumn trainTypeColumn;
-    @FXML
-    public Label currentCapacityLabel;
+    public ViewTrainController() {
+        super();
+    }
+
     @FXML
     public void viewSelectActionPage(ActionEvent actionEvent) throws IOException {
-        if(!adminTrigger) {
+        if (!adminTrigger) {
             navigateTo(actionEvent, "/com/trs/forms/OfficerActionPage.fxml");
             return;
         }
@@ -72,14 +71,19 @@ public class ViewTrainController extends FormNavigator implements Initializable 
             navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
         }
     }
+
     @FXML
     void deleteSelectedTrain(ActionEvent event) {
         if (trainTable.getSelectionModel().getSelectedItem() == null) {
-            Alert err = new Alert(Alert.AlertType.ERROR, "Please select a train to delete", ButtonType.OK);
+            Alert err = new Alert(Alert.AlertType.ERROR,
+                    "Please select a train to delete",
+                    ButtonType.OK);
             err.showAndWait();
             return;
         }
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this train?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete this train?",
+                ButtonType.YES, ButtonType.NO);
         confirm.showAndWait();
         if (confirm.getResult() == ButtonType.YES) {
             try {
@@ -93,7 +97,8 @@ public class ViewTrainController extends FormNavigator implements Initializable 
             }
         }
     }
-    public void clearTextLabels(){
+
+    public void clearTextLabels() {
         arrivalStationL.setText("");
         arrivalTimeL.setText("");
         departureStationL.setText("");
@@ -129,7 +134,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     }
 
     //method to turn the date and time into a timestamp
-    private Timestamp getDateTime(String date, String hour, String minute){
+    private Timestamp getDateTime(String date, String hour, String minute) {
         return ManageTrainController.getTimestamp(date, hour, minute);
     }
 
@@ -144,13 +149,14 @@ public class ViewTrainController extends FormNavigator implements Initializable 
             e.printStackTrace();
         }
     }
-    void prepareColumns(){
+
+    void prepareColumns() {
         trainNumberColumn.setCellValueFactory(new PropertyValueFactory<>("trainNumber"));
         trainTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
     }
 
-    void prepareTable(){
+    void prepareTable() {
         trainTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 Train train = (Train) newSelection;
@@ -166,7 +172,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
     }
 
 
-    private void  isInitialized(){
+    private void isInitialized() {
         assert arrivalStationL != null : "fx:id=\"arrivalStationL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert arrivalTimeL != null : "fx:id=\"arrivalTimeL\" was not injected: check your FXML file 'ViewTrain.fxml'.";
         assert backBtn != null : "fx:id=\"backBtn\" was not injected: check your FXML file 'ViewTrain.fxml'.";
@@ -187,7 +193,6 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         prepareColumns();
         prepareTable();
     }
-
 
 
 }

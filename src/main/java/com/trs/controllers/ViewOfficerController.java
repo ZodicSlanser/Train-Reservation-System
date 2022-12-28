@@ -1,11 +1,5 @@
 package com.trs.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import com.trs.api.managers.OfficerManager;
 import com.trs.modules.TicketingOfficer;
 import javafx.event.ActionEvent;
@@ -13,15 +7,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import static com.trs.controllers.FormNavigator.navigateTo;
 
 public class ViewOfficerController {
 
-   public ViewOfficerController(){
-
-        super();
-    }
-
+    OfficerManager officerManager = new OfficerManager();
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -52,7 +48,11 @@ public class ViewOfficerController {
     private Label addressLabel;
     @FXML
     private Button backButton;
-    OfficerManager officerManager = new OfficerManager();
+    public ViewOfficerController() {
+
+        super();
+    }
+
     @FXML
     void backHandle(ActionEvent event) throws IOException {
         navigateTo(event, "/com/trs/forms/AdminActionPage.fxml");
@@ -60,14 +60,14 @@ public class ViewOfficerController {
 
     @FXML
     void deleteHandle(ActionEvent event) {
-        if(lastNameLabel.getText().trim().equals("")){
+        if (lastNameLabel.getText().trim().equals("")) {
             Alert err = new Alert(Alert.AlertType.ERROR, "Please select an officer to delete", ButtonType.OK);
             err.showAndWait();
             return;
         }
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this officer?", ButtonType.YES, ButtonType.NO);
         confirm.showAndWait();
-        if(confirm.getResult() == ButtonType.YES){
+        if (confirm.getResult() == ButtonType.YES) {
             try {
                 officerManager.deleteTicketingOfficer((TicketingOfficer) officerTable.getSelectionModel().getSelectedItem());
                 officerTable.getItems().remove(officerTable.getSelectionModel().getSelectedItem());
@@ -85,12 +85,9 @@ public class ViewOfficerController {
 
     }
 
-
-
-
     @FXML
     void editHandle(ActionEvent event) {
-        if(lastNameLabel.getText().trim().equals("")){
+        if (lastNameLabel.getText().trim().equals("")) {
             Alert err = new Alert(Alert.AlertType.ERROR, "Please select an officer to edit", ButtonType.OK);
             err.showAndWait();
             return;
@@ -125,24 +122,25 @@ public class ViewOfficerController {
             e.printStackTrace();
         }
     }
-        void prepareColumns(){
-            IDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-            usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-            positionCoulmn.setCellValueFactory(new PropertyValueFactory<>("position"));
-        }
 
-        void prepareTable(){
-            officerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    TicketingOfficer officer = (TicketingOfficer) newSelection;
-                    firstNameLabel.setText(officer.getFirstName());
-                    lastNameLabel.setText(officer.getLastName());
-                    salaryLabel.setText(String.valueOf(officer.getSalary()));
-                    phoneNumberLabel.setText(officer.getPhoneNumber());
-                    addressLabel.setText(officer.getAddress());
-                }
-            });
-        }
+    void prepareColumns() {
+        IDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        positionCoulmn.setCellValueFactory(new PropertyValueFactory<>("position"));
+    }
+
+    void prepareTable() {
+        officerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                TicketingOfficer officer = (TicketingOfficer) newSelection;
+                firstNameLabel.setText(officer.getFirstName());
+                lastNameLabel.setText(officer.getLastName());
+                salaryLabel.setText(String.valueOf(officer.getSalary()));
+                phoneNumberLabel.setText(officer.getPhoneNumber());
+                addressLabel.setText(officer.getAddress());
+            }
+        });
+    }
 
     @FXML
     void initialize() throws SQLException {
@@ -152,7 +150,7 @@ public class ViewOfficerController {
         prepareTable();
     }
 
-    private void  isInitialized(){
+    private void isInitialized() {
         assert officerTable != null : "fx:id=\"officerTable\" was not injected: check your FXML file 'ViewOfficer.fxml'.";
         assert IDColumn != null : "fx:id=\"IDColumn\" was not injected: check your FXML file 'ViewOfficer.fxml'.";
         assert usernameColumn != null : "fx:id=\"usernameColumn\" was not injected: check your FXML file 'ViewOfficer.fxml'.";

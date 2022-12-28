@@ -1,11 +1,5 @@
 package com.trs.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import com.trs.api.managers.TicketManager;
 import com.trs.api.managers.TrainManager;
 import com.trs.modules.Train;
@@ -14,6 +8,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import static com.trs.controllers.FormNavigator.navigateTo;
 
@@ -24,12 +24,9 @@ public class ViewTicketsController {
     static boolean editTrigger;
     static boolean adminTrigger;
     static Train selectedTrain;
-    public static void setTrainNumber(Train train) {
-        selectedTrain = train;
-    }
-
     static boolean trainTrigger;
-
+    @FXML
+    public Label PriceLabel;
     @FXML
     private ResourceBundle resources;
 
@@ -51,16 +48,15 @@ public class ViewTicketsController {
     @FXML
     private Button newButton;
     @FXML
-    public Label PriceLabel;
-
-    @FXML
     private Button editButton;
-
     @FXML
     private Button deleteButton;
-
     @FXML
     private Button backButton;
+
+    public static void setTrainNumber(Train train) {
+        selectedTrain = train;
+    }
 
     @FXML
     void backHandle(ActionEvent event) throws IOException {
@@ -98,7 +94,7 @@ public class ViewTicketsController {
 
     @FXML
     void newHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "/com/trs/forms/ManageTickets.fxml");
+        navigateTo(event, "/com/trs/forms/ReserveTicket.fxml");
 
     }
 
@@ -112,15 +108,17 @@ public class ViewTicketsController {
             e.printStackTrace();
         }
     }
-    void prepareColumns(){
-        ticketIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+    void prepareColumns() {
+        ticketIDColumn.setCellValueFactory(new PropertyValueFactory<>("ticketNumber"));
 
     }
-    void prepareTable(){
+
+    void prepareTable() {
         ticketTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedTicket = (Ticket) newSelection;
-                trainNumberLabel.setText(selectedTicket.getTrainNumber() +"");
+                trainNumberLabel.setText(selectedTicket.getTrainNumber() + "");
                 reservationDateLabel.setText(selectedTicket.getReservationDate().toString());
                 degreeLabel.setText(String.valueOf(selectedTicket.getTicketClass()));
                 FareLabel.setText(String.valueOf(selectedTicket.getFare()));
@@ -128,12 +126,13 @@ public class ViewTicketsController {
         });
     }
 
-    void clearLabels(){
+    void clearLabels() {
         trainNumberLabel.setText("");
         reservationDateLabel.setText("");
         degreeLabel.setText("");
-        FareLabel.setText("");
+        PriceLabel.setText("");
     }
+
     @FXML
     void initialize() {
         isInitialized();
@@ -143,7 +142,7 @@ public class ViewTicketsController {
         clearLabels();
     }
 
-    void isInitialized(){
+    void isInitialized() {
         assert ticketTable != null : "fx:id=\"ticketTable\" was not injected: check your FXML file 'ViewTickets.fxml'.";
         assert ticketIDColumn != null : "fx:id=\"ticketIDColumn\" was not injected: check your FXML file 'ViewTickets.fxml'.";
         assert trainNumberLabel != null : "fx:id=\"trainNumberLabel\" was not injected: check your FXML file 'ViewTickets.fxml'.";

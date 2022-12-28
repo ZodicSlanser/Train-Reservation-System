@@ -21,7 +21,7 @@ public class Train {
     protected int price;
     protected List<Ticket> trainTickets;
 
-    public Train(int trainNumber, String type, Timestamp departureTime, Timestamp arrivalTime, String departureStation, String arrivalStation, int maximumCapacity,int price) throws SQLException {
+    public Train(int trainNumber, String type, Timestamp departureTime, Timestamp arrivalTime, String departureStation, String arrivalStation, int maximumCapacity, int price) throws SQLException {
         this.trainNumber = trainNumber;
         this.type = type;
         this.departureTime = departureTime;
@@ -39,24 +39,23 @@ public class Train {
         currentCapacity = calculateCurrentCapacity();
     }
 
-
-    private int calculateCurrentCapacity() throws SQLException {
-        return maximumCapacity - trainTickets.size() ;
-    }
-
     //generate trains as dummy data
     public static ArrayList<Train> generateTrains() throws SQLException {
         ArrayList<Train> trains = new ArrayList<>(List.of(
-                new Train(1, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(2, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(3, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(4, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(5, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(6, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(7, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100),
-                new Train(8, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100,100)));
+                new Train(1, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(2, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(3, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(4, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(5, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(6, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(7, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100),
+                new Train(8, "Express", Timestamp.valueOf("2020-01-01 10:00:00"), Timestamp.valueOf("2020-01-01 12:00:00"), "Cairo", "Alexandria", 100, 100)));
 
         return trains;
+    }
+
+    private int calculateCurrentCapacity() throws SQLException {
+        return maximumCapacity - trainTickets.size();
     }
 
     public int getPrice() {
@@ -66,9 +65,11 @@ public class Train {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public int getCurrentCapacity() {
         return currentCapacity;
     }
+
     public int getTrainNumber() {
         return trainNumber;
     }
@@ -132,6 +133,7 @@ public class Train {
     public boolean isFull() {
         return currentCapacity == maximumCapacity;
     }
+
     public boolean addTicket(Ticket ticket) {
         if (!isFull() && this.has(ticket)) {
             currentCapacity++;
@@ -141,6 +143,7 @@ public class Train {
         }
         return false;
     }
+
     public List<Ticket> getAllTrainTickets() throws SQLException {
         return trainTickets;
     }
