@@ -1,5 +1,6 @@
 package com.trs.api.database;
 
+import javax.xml.transform.Source;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,6 +68,7 @@ public abstract class CRUD {
     protected static void insert(String tableName, List<String> columns, List<String> values) throws SQLException {
         if (isConnected()) {
             String sql = "INSERT INTO " + tableName + " (" + String.join(", ", columns) + ") VALUES (" + String.join(", ", values) + ")";
+
             System.out.println(sql);
             PS = connection.prepareStatement(sql);
             PS.executeUpdate();
@@ -77,7 +79,7 @@ public abstract class CRUD {
     protected static void update(String tableName, List<String> columns, List<String> values, String condition) throws SQLException {
         if (isConnected()) {
             String sql = "UPDATE " + tableName + " SET ";
-            for (int i = 0; i < columns.size()-1; i++) {
+            for (int i = 0; i < columns.size() - 1; i++) {
                 sql += columns.get(i) + " = " + values.get(i);
                 if (i != columns.size() - 2) {
                     sql += ", ";

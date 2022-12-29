@@ -21,6 +21,7 @@ public abstract class FormNavigator {
         window.setScene(loginScene);
         window.show();
     }
+
     public static void viewManageOfficerPage(ActionEvent actionEvent) throws IOException {
         Parent officerPage = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/ManageOfficer.fxml")));
         Scene officerPageScene = new Scene(officerPage);
@@ -28,6 +29,7 @@ public abstract class FormNavigator {
         window.setScene(officerPageScene);
         window.show();
     }
+
     public static void viewTrainPage(ActionEvent actionEvent) throws IOException {
         Parent adminPage = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/ViewTrain.fxml")));
         Scene adminPageScene = new Scene(adminPage);
@@ -43,13 +45,15 @@ public abstract class FormNavigator {
         window.setScene(manageTrainPageScene);
         window.show();
     }
-   public static void viewReserveTicketPage(ActionEvent actionEvent) throws IOException {
+
+    public static void viewReserveTicketPage(ActionEvent actionEvent) throws IOException {
         Parent reserveTicketPage = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/ReserveTicket.fxml")));
         Scene reserveTicketPageScene = new Scene(reserveTicketPage);
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         window.setScene(reserveTicketPageScene);
         window.show();
     }
+
     public static void viewOfficerPage(ActionEvent actionEvent) throws IOException {
         Parent reserveTicketPage = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/ViewOfficer.fxml")));
         Scene reserveTicketPageScene = new Scene(reserveTicketPage);
@@ -57,6 +61,7 @@ public abstract class FormNavigator {
         window.setScene(reserveTicketPageScene);
         window.show();
     }
+
     public static void navigateTo(ActionEvent actionEvent, String path) throws IOException {
         Parent parent = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource(path)));
         Scene scene = new Scene(parent);
@@ -70,8 +75,9 @@ public abstract class FormNavigator {
         viewTrainController.disableButtons();
         viewTrainPage(actionEvent);
     }
+
     public static void viewManageOfficerPageDisableButtons(ActionEvent actionEvent) throws IOException {
-       manageOfficerController.disableIDTextField();
+        manageOfficerController.disableIDTextField();
         viewManageOfficerPage(actionEvent);
     }
 

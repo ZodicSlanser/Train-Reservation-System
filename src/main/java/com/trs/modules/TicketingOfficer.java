@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TicketingOfficer {
+    protected final OfficerManager officerManager = new OfficerManager();
     protected int id;
     protected int salary;
     protected String username;
@@ -17,17 +18,17 @@ public class TicketingOfficer {
     protected String lastName;
     protected String phoneNumber;
     protected String address;
-
     protected String position;
-    protected final OfficerManager officerManager = new OfficerManager();
     TrainManager trainManager = new TrainManager();
     TicketManager ticketManager = new TicketManager();
 
-    public TicketingOfficer(){
+    public TicketingOfficer() throws SQLException {
         this.position = getPosition();
     }
-    public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username, String password)
-    {   this.id = id;
+
+
+    public TicketingOfficer(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username, String password) throws SQLException {
+        this.id = id;
         this.salary = salary;
         this.firstName = FirstName;
         this.lastName = LastName;
@@ -38,7 +39,7 @@ public class TicketingOfficer {
         this.position = getPosition();
     }
 
-    public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
+    public TicketingOfficer(String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username, String password) throws SQLException {
         this.salary = salary;
         this.firstName = FirstName;
         this.lastName = LastName;
@@ -123,10 +124,10 @@ public class TicketingOfficer {
     public boolean bookTicket(Ticket ticket, Train train) throws SQLException {
         try {
             ticketManager.addTicket(ticket);
-            return train.addTicket(ticket);
         } catch (Exception e) {
-            throw new SQLException("Error in booking ticket");
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     public Ticket findTicket(String ticketNumber) {

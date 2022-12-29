@@ -1,30 +1,28 @@
 package com.trs.modules.tickets;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public abstract class Ticket {
 
-    protected String number;
-    protected int fare;
-    protected int TrainNumber;
-    protected LocalDateTime reservationDate;
+    public String ticketNumber;
+    public int fare;
+    public int trainNumber;
+    public Date reservationDate;
 
-    public Ticket(String number, int fare, int TrainNumber, LocalDateTime reservationDate) {
-        this.number = number;
-        this.TrainNumber = TrainNumber;
-        this.reservationDate = reservationDate;
-    }
-    public Ticket(int fare, int TrainNumber, LocalDateTime reservationDate) {
-        this.TrainNumber = TrainNumber;
+    public Ticket(String TicketNumber, int fare, int TrainNumber, Date reservationDate) {
+        this.ticketNumber = TicketNumber;
+        this.trainNumber = TrainNumber;
+        this.fare = fare;
         this.reservationDate = reservationDate;
     }
 
-    public String getNumber() {
-        return number;
+
+    public String getTicketNumber() {
+        return ticketNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
     public int getFare() {
@@ -36,18 +34,18 @@ public abstract class Ticket {
     }
 
     public int getTrainNumber() {
-        return TrainNumber;
+        return trainNumber;
     }
 
     public void setTrainNumber(int trainNumber) {
-        TrainNumber = trainNumber;
+        this.trainNumber = trainNumber;
     }
 
-    public LocalDateTime getReservationDate() {
+    public Date getReservationDate() {
         return reservationDate;
     }
 
-    public void setReservationDate(LocalDateTime reservationDate) {
+    public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
     }
 

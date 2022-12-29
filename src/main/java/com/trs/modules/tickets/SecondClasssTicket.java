@@ -1,11 +1,11 @@
 package com.trs.modules.tickets;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class SecondClasssTicket extends Ticket {
 
-    public SecondClasssTicket(String number, int fare, int TrainNumber, LocalDateTime reservationDate) {
-        super(number, fare * 2, TrainNumber, reservationDate);
+    public SecondClasssTicket(String number, int fare, int TrainNumber, Date reservationDate) {
+        super(number, fare, TrainNumber, reservationDate);
     }
 
     @Override

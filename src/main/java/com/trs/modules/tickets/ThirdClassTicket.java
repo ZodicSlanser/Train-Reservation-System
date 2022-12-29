@@ -1,10 +1,10 @@
 package com.trs.modules.tickets;
 
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class ThirdClassTicket extends Ticket {
-    public ThirdClassTicket(String number, int fare, int TrainNumber, LocalDateTime reservationDate) {
+    public ThirdClassTicket(String number, int fare, int TrainNumber, Date reservationDate) {
         super(number, fare, TrainNumber, reservationDate);
     }
 

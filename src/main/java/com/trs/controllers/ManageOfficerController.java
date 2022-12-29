@@ -1,22 +1,26 @@
 package com.trs.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.trs.api.managers.OfficerManager;
 import com.trs.modules.SystemAdmin;
 import com.trs.modules.TicketingOfficer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import static com.trs.controllers.FormNavigator.navigateTo;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class ManageOfficerController {
+import static com.trs.controllers.FormNavigator.navigateTo;
+import static com.trs.controllers.ManageTrainController.showErrorMessage;
+import static com.trs.controllers.ManageTrainController.tryParse;
+
+public class ManageOfficerController extends FormNavigator implements Initializable {
 
     public static boolean editTrigger;
     public static TicketingOfficer selectedOfficer;
@@ -26,6 +30,7 @@ public class ManageOfficerController {
     public TextField passwordTextField;
     @FXML
     public TextField usernameTextField;
+    String status;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -46,12 +51,20 @@ public class ManageOfficerController {
     private Button addButton;
     @FXML
     private Button backButton;
-    String status;
 
-    public ManageOfficerController(){
+    public ManageOfficerController() {
         super();
     }
-    private void setValues(){
+
+    public static void setEditTrigger(boolean trigger) {
+        editTrigger = trigger;
+    }
+
+    public static void setSelectedOfficer(TicketingOfficer officer) {
+        ManageOfficerController.selectedOfficer = officer;
+    }
+
+    private void setValues() {
         firstNameTextField.setText(selectedOfficer.getFirstName());
         lastNameTextField.setText(selectedOfficer.getLastName());
         phoneNumberTextField.setText(selectedOfficer.getPhoneNumber());
@@ -61,13 +74,8 @@ public class ManageOfficerController {
         passwordTextField.setText(selectedOfficer.getPassword());
         IDTextField.setText(String.valueOf(selectedOfficer.getId()));
     }
-    public static void setEditTrigger(boolean trigger){
-        editTrigger = trigger;
-    }
-    public static void setSelectedOfficer(TicketingOfficer officer){
-        ManageOfficerController.selectedOfficer = officer;
-    }
-    private TicketingOfficer getValues(TicketingOfficer officer){
+
+    private TicketingOfficer getValues(TicketingOfficer officer) {
         officer.setFirstName(firstNameTextField.getText());
         officer.setLastName(lastNameTextField.getText());
         officer.setPhoneNumber(phoneNumberTextField.getText());
@@ -78,7 +86,8 @@ public class ManageOfficerController {
         officer.setId(Integer.parseInt(IDTextField.getText()));
         return officer;
     }
-    private boolean checkValues(){
+
+    private boolean checkValues() {
         return !firstNameTextField.getText().isEmpty() &&
                 !lastNameTextField.getText().isEmpty() &&
                 !phoneNumberTextField.getText().isEmpty() &&
@@ -88,7 +97,8 @@ public class ManageOfficerController {
                 !passwordTextField.getText().isEmpty() &&
                 !IDTextField.getText().isEmpty();
     }
-    private String checkSuccess(TicketingOfficer officer) {
+
+    private String checkSuccess(TicketingOfficer officer) throws SQLException {
         if (editTrigger) {
             status = new SystemAdmin().updateOfficer(officer);
             return status;
@@ -96,17 +106,17 @@ public class ManageOfficerController {
         status = new SystemAdmin().addOfficer(officer);
         return status;
     }
-    public void updateOfficer(){
-        if(checkValues()){
+
+    public void updateOfficer() throws SQLException {
+        if (checkValues()) {
             TicketingOfficer officer = getValues(selectedOfficer);
             String status = checkSuccess(officer);
             Alert alert;
-            if(status.equals("Success")){
+            if (status.equals("Success")) {
                 alert = new Alert(Alert.AlertType.INFORMATION, status);
                 alert.setTitle("Success");
                 alert.setHeaderText(status);
-            }
-            else{
+            } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Officer Update Failed");
@@ -115,16 +125,16 @@ public class ManageOfficerController {
             alert.showAndWait();
         }
     }
-    public void addOfficer(TicketingOfficer officer){
-        if(checkValues()){
+
+    public void addOfficer(TicketingOfficer officer) throws SQLException {
+        if (checkValues()) {
             String status = checkSuccess(getValues(officer));
             Alert alert;
-            if(status.equals("Success")){
+            if (status.equals("Success")) {
                 alert = new Alert(Alert.AlertType.INFORMATION, status);
                 alert.setTitle("Success");
                 alert.setHeaderText(status);
-            }
-            else{
+            } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Officer Add Failed");
@@ -133,15 +143,37 @@ public class ManageOfficerController {
             alert.showAndWait();
         }
     }
+    public boolean isNumber() {
+        if (  !(tryParse(IDTextField.getText())&&
+                tryParse(salaryTextField.getText())&&
+                tryParse(phoneNumberTextField.getText()))) {
+            return false;
+        }
+        return true;
+    }
+    public boolean isText() {
+        return !tryParse(firstNameTextField.getText()) && !tryParse(lastNameTextField.getText());
+    }
+    public static void confirmMessage(String e){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Done");
+        alert.setHeaderText("Successfully");
+        alert.setContentText(e);
+        alert.showAndWait();
+    }
     @FXML
-    void addHandle(ActionEvent event) {
+    void addHandle(ActionEvent event) throws SQLException {
+        if (!isText() || !isNumber()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Text setting failed");
+            alert.setContentText("Please fill all the text fields correctly");
+            alert.showAndWait();
+            return;
+        }
         if (!editTrigger) {
             if (OfficerManager.IDExists(Integer.parseInt(IDTextField.getText()))) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Officer Add Failed");
-                alert.setContentText("ID already exists");
-                alert.showAndWait();
+                showErrorMessage("ID already exists");
                 return;
             }
             if (positionDropDown.getValue().equals("Ticketing Officer")) {
@@ -152,14 +184,17 @@ public class ManageOfficerController {
             return;
         }
         updateOfficer();
+        clearFields();
     }
+
     @FXML
+
     void backHandle(ActionEvent event) throws IOException {
         navigateTo(event, "/com/trs/forms/ViewOfficer.fxml");
         setEditTrigger(false);
     }
 
-    void clearFields(){
+    void clearFields() {
         firstNameTextField.clear();
         lastNameTextField.clear();
         phoneNumberTextField.clear();
@@ -170,18 +205,7 @@ public class ManageOfficerController {
         IDTextField.clear();
     }
 
-    @FXML
-    void initialize() {
-        isInitialized();
-        positionDropDown.getItems().addAll(new String[] {"Ticketing Officer", "System Admin"});
-        if(editTrigger) {
-            setValues();
-            setOfficerPosition();
-            disableIDTextField();
-        }
-        positionDropDown.getSelectionModel().select(0);
-    }
-    void isInitialized(){
+    void isInitialized() {
         assert firstNameTextField != null : "fx:id=\"firstNameTextField\" was not injected: check your FXML file 'ManageOfficer.fxml'.";
         assert lastNameTextField != null : "fx:id=\"lastNameTextField\" was not injected: check your FXML file 'ManageOfficer.fxml'.";
         assert phoneNumberTextField != null : "fx:id=\"phoneNumberTextField\" was not injected: check your FXML file 'ManageOfficer.fxml'.";
@@ -192,14 +216,26 @@ public class ManageOfficerController {
         assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'ManageOfficer.fxml'.";
     }
 
-    public void setOfficerPosition(){
-            if (selectedOfficer instanceof SystemAdmin)
-                positionDropDown.getSelectionModel().select(1);
-            else
-                positionDropDown.getSelectionModel().select(0);
+    public void setOfficerPosition() {
+        if (selectedOfficer instanceof SystemAdmin)
+            positionDropDown.getSelectionModel().select(1);
+        else
+            positionDropDown.getSelectionModel().select(0);
 
     }
     public void disableIDTextField() {
         IDTextField.setDisable(true);
     }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        isInitialized();
+        positionDropDown.getItems().addAll(new String[]{"Ticketing Officer", "System Admin"});
+        if (editTrigger) {
+            setValues();
+            setOfficerPosition();
+            disableIDTextField();
+        }
+        positionDropDown.getSelectionModel().select(0);
+    }
 }
+

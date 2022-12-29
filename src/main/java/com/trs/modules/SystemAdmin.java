@@ -6,17 +6,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SystemAdmin extends TicketingOfficer {
-    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address,String username,String password) {
-        super(id, FirstName, LastName, PhoneNumber, salary, Address,username,password);
+    public SystemAdmin(int id, String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username, String password) throws SQLException {
+        super(id, FirstName, LastName, PhoneNumber, salary, Address, username, password);
         this.position = getPosition();
     }
 
-    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username,String password) {
-        super(FirstName, LastName, PhoneNumber, salary, Address,username,password);
+    public SystemAdmin(String FirstName, String LastName, String PhoneNumber, int salary, String Address, String username, String password) throws SQLException {
+        super(FirstName, LastName, PhoneNumber, salary, Address, username, password);
         this.position = getPosition();
     }
 
-    public SystemAdmin() {
+    public SystemAdmin() throws SQLException {
         super();
         this.position = getPosition();
     }
@@ -47,7 +47,7 @@ public class SystemAdmin extends TicketingOfficer {
     public String updateOfficer(TicketingOfficer newOfficer) {
         try {
             officerManager.updateTicketingOfficer(newOfficer);
-          return "Success";
+            return "Success";
         } catch (SQLException e) {
             return e.getMessage();
         }
