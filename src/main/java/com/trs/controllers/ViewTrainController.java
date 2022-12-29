@@ -74,6 +74,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
             isTrain = true;
             navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
         }
+        new Alert(Alert.AlertType.ERROR, "Please select a train first").showAndWait();
     }
 
     @FXML
@@ -128,6 +129,7 @@ public class ViewTrainController extends FormNavigator implements Initializable 
                 e.printStackTrace();
             }
         }
+        new Alert(Alert.AlertType.ERROR, "Please select a train first").showAndWait();
 
     }
 
