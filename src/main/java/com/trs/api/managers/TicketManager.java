@@ -91,6 +91,7 @@ public class TicketManager extends CRUD {
         }
         return null;
     }
+
     //a method that removes a Ticket from database
     public static void removeTicket(Ticket ticket) throws SQLException {
         deleteWhereEqual("tickets", "ticketNumber", ticket.getTicketNumber());
@@ -114,7 +115,6 @@ public class TicketManager extends CRUD {
     public static void deleteAll() throws SQLException {
         prune("tickets");
     }
-
     public static String generateTicketID(int trainNumber){
             return String.valueOf(generateTicketNumber(trainNumber));
     }

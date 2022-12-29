@@ -5,7 +5,7 @@ import java.sql.Date;
 public class FirstClassTicket extends Ticket {
 
     public FirstClassTicket(String ticketNumber, int fare, int trainNumber, Date reservationDate) {
-        super(ticketNumber, fare * 3, trainNumber, reservationDate);
+        super(ticketNumber, fare, trainNumber, reservationDate);
     }
 
     @Override
