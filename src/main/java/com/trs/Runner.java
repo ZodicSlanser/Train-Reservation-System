@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Runner extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent loginParent = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/Login.fxml")));
+        Parent loginParent = FXMLLoader.load(Objects.requireNonNull(FormNavigator.class.getResource("/com/trs/forms/z.fxml")));
         Scene loginScene = new Scene(loginParent);
         stage.setScene(loginScene);
         stage.show();

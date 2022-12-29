@@ -155,7 +155,6 @@ public class ManageTrainController extends FormNavigator implements Initializabl
                 return;
             }
             showErrorMessage("Id Exists");
-            add();
             return;
         }
         update();
@@ -236,7 +235,6 @@ public class ManageTrainController extends FormNavigator implements Initializabl
     }
     public boolean checkDate(){
         if(departureDatePicker.getValue().isAfter( arrivalDatePicker.getValue())){
-            showErrorMessage("arrival date is not valid");
             return false;
         }
         else
@@ -246,7 +244,7 @@ public class ManageTrainController extends FormNavigator implements Initializabl
     }
     public boolean checkHours(){
         if(Integer.parseInt(departureHourTextField.getText())>24 || Integer.parseInt(arrivalHourTextField.getText())>24||Integer.parseInt(departureHourTextField.getText())<0 || Integer.parseInt(arrivalHourTextField.getText())<0){
-            showErrorMessage("time is not correct");
+
             return false;
         }
         else {
@@ -262,16 +260,13 @@ public class ManageTrainController extends FormNavigator implements Initializabl
                 tryParse(arrivalMinuteTextField.getText())&&
                 tryParse(departureHourTextField.getText())&&
                 tryParse(departureMinuteTextField.getText()))) {
-            showErrorMessage("invalid data type entered");
             return false;
         }return true;
     }
 
     public boolean isText() {
         if  (tryParse(typeTextField.getText())||tryParse(departureStationTextField.getText())||tryParse(arrivalStationTextField.getText())) {
-            showErrorMessage("invalid data type entered");
             return false;
-
         }return true;
     }
     public static boolean tryParse(String text) {
@@ -284,7 +279,6 @@ public class ManageTrainController extends FormNavigator implements Initializabl
     }
     public boolean checkMinutes(){
         if(Integer.parseInt(departureMinuteTextField.getText())<0 || Integer.parseInt(arrivalMinuteTextField.getText())<0||Integer.parseInt(departureMinuteTextField.getText())>60 || Integer.parseInt(arrivalMinuteTextField.getText())>60){
-            showErrorMessage("time is not correct");
             return false;
         }
         else {
