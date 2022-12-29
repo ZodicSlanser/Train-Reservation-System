@@ -68,7 +68,6 @@ public class LoginController extends FormNavigator implements Initializable {
     }
 
     private static boolean isAdmin = false;
-
     public static boolean IsAdmin() {
         return isAdmin;
     }

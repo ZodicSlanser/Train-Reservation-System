@@ -1,17 +1,28 @@
 package com.trs.controllers;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+import static com.trs.controllers.ManageTrainController.showErrorMessage;
+import static com.trs.controllers.ManageTrainController.tryParse;
 
 public class ManageTicketsController extends FormNavigator implements Initializable {
+    public boolean isNumber() {
+        if (  !(tryParse(totalPriceTextField.getText())&&
+                tryParse(ticketNumberTextField.getText()))){
+            showErrorMessage("Text setting failed");
+            return false;
+        }return true;
+    }
+
+
+
     int numberOfTickets;
     @FXML
     private ResourceBundle resources;

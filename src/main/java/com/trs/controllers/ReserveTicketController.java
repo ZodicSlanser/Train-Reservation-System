@@ -12,13 +12,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.ResourceBundle;
+import static com.trs.controllers.ManageTrainController.showErrorMessage;
+import static com.trs.controllers.ManageTrainController.tryParse;
 
 public class ReserveTicketController extends FormNavigator implements Initializable {
 
@@ -64,6 +65,13 @@ public class ReserveTicketController extends FormNavigator implements Initializa
         super();
     }
 
+    public boolean isNumber() {
+        if ( !(tryParse(ticketsNumberTextField.getText())&&
+                tryParse(trainNumberTextField.getText()))) {
+            showErrorMessage("invalid data type entered");
+            return false;
+        }return true;
+    }
     @FXML
     void backHandle(ActionEvent event) throws IOException {
         if(LoginController.IsAdmin()) {
@@ -85,6 +93,7 @@ public class ReserveTicketController extends FormNavigator implements Initializa
                         new FirstClassTicket(TicketManager.generateTicketID(trainNumber),
                         price / numberOfTickets, trainNumber, date),
                         new SystemAdmin().findTrain(trainNumber));
+
                 case "Second Class" -> new SystemAdmin().bookTicket(
                         new SecondClasssTicket(TicketManager.generateTicketID(trainNumber),
                         price / numberOfTickets, trainNumber, date),
@@ -95,6 +104,18 @@ public class ReserveTicketController extends FormNavigator implements Initializa
                         new SystemAdmin().findTrain(trainNumber));
             }
         }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Done");
+        alert.setHeaderText("Successfully");
+        alert.setContentText("Added Successfully");
+        alert.showAndWait();
+        clearFields();
+
+    }
+    public void clearFields(){
+        ticketsNumberTextField.clear();
+        singlePriceTextField.clear();
+
     }
 
     void getAllTrainIDs() throws SQLException {

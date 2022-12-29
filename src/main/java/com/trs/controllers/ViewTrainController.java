@@ -66,7 +66,6 @@ public class ViewTrainController extends FormNavigator implements Initializable 
         }
         navigateTo(actionEvent, "/com/trs/forms/AdminActionPage.fxml");
     }
-
     @FXML
     public void ViewTicketsTrainPage(ActionEvent actionEvent) throws IOException {
         if (trainTable.getSelectionModel().getSelectedItem() != null) {

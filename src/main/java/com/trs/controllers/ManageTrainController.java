@@ -1,5 +1,12 @@
 package com.trs.controllers;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
 import com.trs.api.managers.TrainManager;
 import com.trs.modules.SystemAdmin;
 import com.trs.modules.Train;
@@ -94,7 +101,6 @@ public class ManageTrainController extends FormNavigator implements Initializabl
         finalDate[0] = date[0];
         finalDate[1] = date[1].split(":")[0];
         finalDate[2] = date[1].split(":")[1];
-
         return finalDate;
     }
 
@@ -113,22 +119,60 @@ public class ManageTrainController extends FormNavigator implements Initializabl
         typeTextField.setText(selectedTrain.getType());
     }
 
+    public static void showErrorMessage(String e){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Failed");
+        alert.setContentText(e);
+        alert.showAndWait();
+    }
+    private boolean checkDateTime() {
+        return checkDate() && checkMinutes() && checkHours();
+    }
+    private boolean numberExists(){
+        return TrainManager.trainNumberExists(Integer.parseInt(trainNumberTextField.getText()));
+    }
+
+
     @FXML
     public void addTrain(ActionEvent actionEvent) throws SQLException {
+        if (!checkDateTime() && isText() && isNumber()) {
+            showErrorMessage("Invalid data");
+            return;
+        }
+
         if (!editTrigger) {
-            if (TrainManager.trainNumberExists((Integer.parseInt(trainNumberTextField.getText())))) {
+            if (!numberExists()){
+                add();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Officer Add Failed");
-                alert.setContentText("ID already exists");
+                alert.setTitle("Done");
+                alert.setHeaderText("Added Successfully");
+                alert.setContentText("data added successfully");
                 alert.showAndWait();
+                clearFields();
+
+
                 return;
             }
+            showErrorMessage("Id Exists");
             add();
             return;
         }
         update();
     }
+    public void clearFields(){
+        maxCapacityTextField.clear();
+        arrivalMinuteTextField.clear();
+        arrivalHourTextField.clear();
+        arrivalStationTextField.clear();
+        standardPriceTextField.clear();
+        trainNumberTextField.clear();
+        departureMinuteTextField.clear();
+        departureHourTextField.clear();
+        departureStationTextField.clear();
+        typeTextField.clear();
+    }
+
 
     private void update() throws SQLException {
         if (checkValues()) {
@@ -150,7 +194,18 @@ public class ManageTrainController extends FormNavigator implements Initializabl
     }
 
     public boolean checkValues() {
-        return !trainNumberTextField.getText().isEmpty() && !departureStationTextField.getText().isEmpty() && !arrivalStationTextField.getText().isEmpty() && !departureDatePicker.getValue().toString().isEmpty() && !departureHourTextField.getText().isEmpty() && !departureMinuteTextField.getText().isEmpty() && !arrivalDatePicker.getValue().toString().isEmpty() && !arrivalHourTextField.getText().isEmpty() && !arrivalMinuteTextField.getText().isEmpty() && !maxCapacityTextField.getText().isEmpty() && !standardPriceTextField.getText().isEmpty() && !typeTextField.getText().isEmpty();
+        return !trainNumberTextField.getText().isEmpty() &&
+                !departureStationTextField.getText().isEmpty() &&
+                !arrivalStationTextField.getText().isEmpty() &&
+                !departureDatePicker.getValue().toString().isEmpty() &&
+                !departureHourTextField.getText().isEmpty() &&
+                !departureMinuteTextField.getText().isEmpty() &&
+                !arrivalDatePicker.getValue().toString().isEmpty() &&
+                !arrivalHourTextField.getText().isEmpty() &&
+                !arrivalMinuteTextField.getText().isEmpty() &&
+                !maxCapacityTextField.getText().isEmpty() &&
+                !standardPriceTextField.getText().isEmpty() &&
+                !typeTextField.getText().isEmpty();
     }
 
     private String checkSuccess(Train train) throws SQLException {
@@ -179,9 +234,73 @@ public class ManageTrainController extends FormNavigator implements Initializabl
             alert.showAndWait();
         }
     }
+    public boolean checkDate(){
+        if(departureDatePicker.getValue().isAfter( arrivalDatePicker.getValue())){
+            showErrorMessage("arrival date is not valid");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean checkHours(){
+        if(Integer.parseInt(departureHourTextField.getText())>24 || Integer.parseInt(arrivalHourTextField.getText())>24||Integer.parseInt(departureHourTextField.getText())<0 || Integer.parseInt(arrivalHourTextField.getText())<0){
+            showErrorMessage("time is not correct");
+            return false;
+        }
+        else {
+            return true;
+        }
+
+
+    }
+    public boolean isNumber() {
+        if (  !(tryParse(standardPriceTextField.getText())&&
+                tryParse(maxCapacityTextField.getText())&&
+                tryParse(arrivalHourTextField.getText())&&
+                tryParse(arrivalMinuteTextField.getText())&&
+                tryParse(departureHourTextField.getText())&&
+                tryParse(departureMinuteTextField.getText()))) {
+            showErrorMessage("invalid data type entered");
+            return false;
+        }return true;
+    }
+
+    public boolean isText() {
+        if  (tryParse(typeTextField.getText())||tryParse(departureStationTextField.getText())||tryParse(arrivalStationTextField.getText())) {
+            showErrorMessage("invalid data type entered");
+            return false;
+
+        }return true;
+    }
+    public static boolean tryParse(String text) {
+        try {
+            Integer.parseInt(text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    public boolean checkMinutes(){
+        if(Integer.parseInt(departureMinuteTextField.getText())<0 || Integer.parseInt(arrivalMinuteTextField.getText())<0||Integer.parseInt(departureMinuteTextField.getText())>60 || Integer.parseInt(arrivalMinuteTextField.getText())>60){
+            showErrorMessage("time is not correct");
+            return false;
+        }
+        else {
+            return true;
+        }
+
+
+    }
 
     private void editTrain() throws SQLException {
         trainManager.updateTrain(getTrainValues());
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Done");
+        alert.setHeaderText("Edited Successfully");
+        alert.setContentText("data edited successfully");
+        alert.showAndWait();
     }
 
     private boolean checkFields() {

@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static com.trs.controllers.FormNavigator.navigateTo;
+import static com.trs.controllers.ManageTrainController.showErrorMessage;
+import static com.trs.controllers.ManageTrainController.tryParse;
 
 public class ManageOfficerController extends FormNavigator implements Initializable {
 
@@ -141,16 +143,36 @@ public class ManageOfficerController extends FormNavigator implements Initializa
             alert.showAndWait();
         }
     }
-
+    public boolean isNumber() {
+        if (  !(tryParse(IDTextField.getText())&&
+                tryParse(salaryTextField.getText())&&
+                tryParse(phoneNumberTextField.getText()))) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Text setting failed");
+            alert.setContentText("invalid data type entered");
+            alert.showAndWait();
+            return false;
+        }return true;
+    }
+    public boolean isText() {
+        if  (tryParse(firstNameTextField.getText())||tryParse(lastNameTextField.getText())||tryParse(usernameTextField.getText())||tryParse(addressTextField.getText())) {
+            showErrorMessage("invalid data type entered");
+            return false;
+        }return true;
+    }
+    public static void confirmMessage(String e){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Done");
+        alert.setHeaderText("Successfully");
+        alert.setContentText(e);
+        alert.showAndWait();
+    }
     @FXML
     void addHandle(ActionEvent event) throws SQLException {
-        if (!editTrigger) {
+        if (!editTrigger&&isText()&&isNumber()) {
             if (OfficerManager.IDExists(Integer.parseInt(IDTextField.getText()))) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Officer Add Failed");
-                alert.setContentText("ID already exists");
-                alert.showAndWait();
+                showErrorMessage("ID already exists");
                 return;
             }
             if (positionDropDown.getValue().equals("Ticketing Officer")) {
@@ -158,12 +180,16 @@ public class ManageOfficerController extends FormNavigator implements Initializa
                 return;
             }
             addOfficer(new SystemAdmin());
+            confirmMessage("data added successfully");
             return;
         }
         updateOfficer();
+        confirmMessage("Added Successfully");
+        clearFields();
     }
 
     @FXML
+
     void backHandle(ActionEvent event) throws IOException {
         navigateTo(event, "/com/trs/forms/ViewOfficer.fxml");
         setEditTrigger(false);
@@ -198,12 +224,10 @@ public class ManageOfficerController extends FormNavigator implements Initializa
             positionDropDown.getSelectionModel().select(0);
 
     }
-
     public void disableIDTextField() {
         IDTextField.setDisable(true);
     }
     @Override
-    @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isInitialized();
         positionDropDown.getItems().addAll(new String[]{"Ticketing Officer", "System Admin"});
@@ -215,3 +239,4 @@ public class ManageOfficerController extends FormNavigator implements Initializa
         positionDropDown.getSelectionModel().select(0);
     }
 }
+
