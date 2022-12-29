@@ -12,6 +12,7 @@ public abstract class Ticket {
     public Ticket(String TicketNumber, int fare, int TrainNumber, Date reservationDate) {
         this.ticketNumber = TicketNumber;
         this.trainNumber = TrainNumber;
+        this.fare = fare;
         this.reservationDate = reservationDate;
     }
 

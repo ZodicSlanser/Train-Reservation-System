@@ -91,6 +91,15 @@ public class ReserveTicketController extends FormNavigator implements Initializa
         int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
         int price = Integer.parseInt(singlePriceTextField.getText());
         getValuesFromFields();
+        Train train = new SystemAdmin().findTrain(trainNumber);
+        if( train.isFull()|| train.getCurrentCapacity() < numberOfTickets) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Train's capacity isn't enough for this reservation");
+            alert.setContentText("Please choose another train");
+            alert.showAndWait();
+            return;
+        }
         for(int i = 0; i < numberOfTickets; i++) {
             switch (degree) {
                 case "First Class" -> new SystemAdmin().bookTicket(
@@ -205,7 +214,7 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     }
 
     public void updateTotalPrice(){
-        if(!ticketsNumberTextField.getText().isEmpty() && !ticketsNumberTextField.getText().isBlank()) {
+        if(!ticketsNumberTextField.getText().isEmpty() || !ticketsNumberTextField.getText().isBlank()) {
             int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
             int price = Integer.parseInt(singlePriceTextField.getText());
             totalPriceLabel.setText(String.valueOf(numberOfTickets * price));
