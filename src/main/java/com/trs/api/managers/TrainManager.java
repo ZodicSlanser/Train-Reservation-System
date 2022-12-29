@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TrainManager extends CRUD {
 
-    private final static List<String> TRAIN_COLUMNS = List.of("ticketNumber", "capacity", "type", "departureTime", "arrivalTime", "departureStation", "arrivalStation", "price");
+    private final static List<String> TRAIN_COLUMNS = List.of("Number", "capacity", "type", "departureTime", "arrivalTime", "departureStation", "arrivalStation", "price");
     private static List<Integer> trainNumbers = new ArrayList<>();
 
     public TrainManager() throws SQLException {
@@ -56,7 +56,7 @@ public class TrainManager extends CRUD {
     //a method that deletes a train from the database
     public static void deleteTrain(Train train) throws SQLException {
         if (isConnected()) {
-            deleteWhereEqual("trains", "ticketNumber", String.valueOf(train.getTrainNumber()));
+            deleteWhereEqual("trains", "Number", String.valueOf(train.getTrainNumber()));
         }
 
     }
@@ -97,7 +97,7 @@ public class TrainManager extends CRUD {
             update("trains",
                     TRAIN_COLUMNS,
                     getTrainValues(train),
-                    "ticketNumber = " + train.getTrainNumber());
+                    "Number = " + train.getTrainNumber());
             return;
         }
         throw new SQLException("Connection to the database failed.");

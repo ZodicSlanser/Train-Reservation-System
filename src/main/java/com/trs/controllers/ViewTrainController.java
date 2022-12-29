@@ -207,16 +207,19 @@ public class ViewTrainController extends FormNavigator implements Initializable 
 
 
     public void handleTicketReserve(ActionEvent actionEvent) {
+        try {
         if (trainTable.getSelectionModel().getSelectedItem() != null) {
             ReserveTicketController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
             ViewTicketsController.selectedTrain = (Train) trainTable.getSelectionModel().getSelectedItem();
             ReserveTicketController.reserveTrigger = true;
             ViewTicketsController.trainTrigger = true;
-            try {
-                navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            navigateTo(actionEvent, "/com/trs/forms/ViewTickets.fxml");
+            return;
             }
+            }catch (IOException e) {
+            e.printStackTrace();
         }
+        new Alert(Alert.AlertType.ERROR, "Please Select A Train First", ButtonType.OK).showAndWait();
     }
 }

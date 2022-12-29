@@ -136,22 +136,17 @@ public class ManageTrainController extends FormNavigator implements Initializabl
 
     @FXML
     public void addTrain(ActionEvent actionEvent) throws SQLException {
-        if (!checkDateTime() && isText() && isNumber()) {
+        if (!isText() || !isNumber()) {
             showErrorMessage("Invalid data");
             return;
         }
-
+        if(!checkDateTime()){
+            showErrorMessage("Invalid date or time");
+            return;
+        }
         if (!editTrigger) {
             if (!numberExists()){
                 add();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Done");
-                alert.setHeaderText("Added Successfully");
-                alert.setContentText("data added successfully");
-                alert.showAndWait();
-                clearFields();
-
-
                 return;
             }
             showErrorMessage("Id Exists");
@@ -234,17 +229,16 @@ public class ManageTrainController extends FormNavigator implements Initializabl
         }
     }
     public boolean checkDate(){
+        if(departureDatePicker.getValue() == null || arrivalDatePicker.getValue() == null){
+            return false;
+        }
         if(departureDatePicker.getValue().isAfter( arrivalDatePicker.getValue())){
             return false;
         }
-        else
-        {
             return true;
-        }
     }
     public boolean checkHours(){
         if(Integer.parseInt(departureHourTextField.getText())>24 || Integer.parseInt(arrivalHourTextField.getText())>24||Integer.parseInt(departureHourTextField.getText())<0 || Integer.parseInt(arrivalHourTextField.getText())<0){
-
             return false;
         }
         else {
@@ -254,20 +248,17 @@ public class ManageTrainController extends FormNavigator implements Initializabl
 
     }
     public boolean isNumber() {
-        if (  !(tryParse(standardPriceTextField.getText())&&
-                tryParse(maxCapacityTextField.getText())&&
-                tryParse(arrivalHourTextField.getText())&&
-                tryParse(arrivalMinuteTextField.getText())&&
-                tryParse(departureHourTextField.getText())&&
-                tryParse(departureMinuteTextField.getText()))) {
-            return false;
-        }return true;
+        return tryParse(standardPriceTextField.getText()) &&
+                tryParse(maxCapacityTextField.getText()) &&
+                tryParse(arrivalHourTextField.getText()) &&
+                tryParse(arrivalMinuteTextField.getText()) &&
+                tryParse(departureHourTextField.getText()) &&
+                tryParse(trainNumberTextField.getText()) &&
+                tryParse(departureMinuteTextField.getText());
     }
 
     public boolean isText() {
-        if  (tryParse(typeTextField.getText())||tryParse(departureStationTextField.getText())||tryParse(arrivalStationTextField.getText())) {
-            return false;
-        }return true;
+        return !tryParse(typeTextField.getText()) && !tryParse(departureStationTextField.getText()) && !tryParse(arrivalStationTextField.getText());
     }
     public static boolean tryParse(String text) {
         try {

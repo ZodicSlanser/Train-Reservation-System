@@ -147,22 +147,15 @@ public class ManageOfficerController extends FormNavigator implements Initializa
         if (  !(tryParse(IDTextField.getText())&&
                 tryParse(salaryTextField.getText())&&
                 tryParse(phoneNumberTextField.getText()))) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Text setting failed");
-            alert.setContentText("invalid data type entered");
-            alert.showAndWait();
             return false;
-        }return true;
+        }
+        return true;
     }
     public boolean isText() {
-        if  (tryParse(firstNameTextField.getText())||tryParse(lastNameTextField.getText())||tryParse(usernameTextField.getText())||tryParse(addressTextField.getText())) {
-            showErrorMessage("invalid data type entered");
-            return false;
-        }return true;
+        return !tryParse(firstNameTextField.getText()) && !tryParse(lastNameTextField.getText());
     }
     public static void confirmMessage(String e){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Done");
         alert.setHeaderText("Successfully");
         alert.setContentText(e);
@@ -170,7 +163,15 @@ public class ManageOfficerController extends FormNavigator implements Initializa
     }
     @FXML
     void addHandle(ActionEvent event) throws SQLException {
-        if (!editTrigger&&isText()&&isNumber()) {
+        if (!isText() || !isNumber()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Text setting failed");
+            alert.setContentText("Please fill all the text fields correctly");
+            alert.showAndWait();
+            return;
+        }
+        if (!editTrigger) {
             if (OfficerManager.IDExists(Integer.parseInt(IDTextField.getText()))) {
                 showErrorMessage("ID already exists");
                 return;
@@ -180,11 +181,9 @@ public class ManageOfficerController extends FormNavigator implements Initializa
                 return;
             }
             addOfficer(new SystemAdmin());
-            confirmMessage("data added successfully");
             return;
         }
         updateOfficer();
-        confirmMessage("Added Successfully");
         clearFields();
     }
 

@@ -70,8 +70,7 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     }
 
     public boolean isNumber() {
-        if ( !(tryParse(ticketsNumberTextField.getText())&&
-                tryParse(trainNumberTextField.getText()))) {
+        if ( !(tryParse(ticketsNumberTextField.getText()))) {
             return false;
         }return true;
     }
@@ -117,7 +116,7 @@ public class ReserveTicketController extends FormNavigator implements Initializa
             }
         }
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Done");
             alert.setHeaderText("Successfully");
             alert.setContentText("Added Successfully");
@@ -167,13 +166,15 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     //change the price of the ticket according to the train
     @FXML
     void trainPickerComboBoxHandle(ActionEvent event) throws SQLException {
-        setTicketClassPrice();
-        updateTotalPrice();
+            setTicketClassPrice();
+            updateTotalPrice();
     }
     @FXML
     void classPickerComboBoxHandle(ActionEvent event) throws SQLException {
-        setTicketClassPrice();
-        updateTotalPrice();
+
+            setTicketClassPrice();
+            updateTotalPrice();
+
     }
 
     @Override
@@ -214,17 +215,23 @@ public class ReserveTicketController extends FormNavigator implements Initializa
     }
 
     public void updateTotalPrice(){
-        if(!ticketsNumberTextField.getText().isEmpty() || !ticketsNumberTextField.getText().isBlank()) {
-            int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
-            int price = Integer.parseInt(singlePriceTextField.getText());
-            totalPriceLabel.setText(String.valueOf(numberOfTickets * price));
+        System.out.println("HERE =====> update total price");
+        if(!tryParse(ticketsNumberTextField.getText()) && !(ticketsNumberTextField.getText().isEmpty() || ticketsNumberTextField.getText().isBlank())  ){
+            new Alert(Alert.AlertType.ERROR, "Please enter a valid number of tickets").showAndWait();
+            ticketsNumberTextField.clear();
+            totalPriceLabel.setText("0");
             return;
         }
-        totalPriceLabel.setText("0");
+
+        if(!ticketsNumberTextField.getText().isEmpty() || !ticketsNumberTextField.getText().isBlank()){
+            int numberOfTickets = Integer.parseInt(ticketsNumberTextField.getText());
+            int singlePrice = Integer.parseInt(singlePriceTextField.getText());
+            totalPriceLabel.setText(String.valueOf(numberOfTickets * singlePrice));
+        }
     }
     @FXML
     public void HandleTotalPrice(KeyEvent keyEvent) {
-        updateTotalPrice();
+            updateTotalPrice();
 
     }
 

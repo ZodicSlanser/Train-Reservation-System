@@ -63,7 +63,12 @@ public class ViewTicketsController {
 
     @FXML
     void backHandle(ActionEvent event) throws IOException {
-        navigateTo(event, "/com/trs/forms/AdminActionPage.fxml");
+       if(LoginController.IsAdmin()) {
+           navigateTo(event, "/com/trs/forms/AdminActionPage.fxml");
+           return;
+
+       }
+           navigateTo(event, "/com/trs/forms/OfficerActionPage.fxml");
     }
 
     @FXML
@@ -150,7 +155,6 @@ public class ViewTicketsController {
 
     void setPrivileges() {
         if (!LoginController.IsAdmin()) {
-            newButton.setDisable(true);
             editButton.setDisable(true);
             deleteButton.setDisable(true);
         }

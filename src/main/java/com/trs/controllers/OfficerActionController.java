@@ -27,6 +27,7 @@ public class OfficerActionController extends FormNavigator implements Initializa
 
     @FXML
     void addTicketHandle(ActionEvent event) throws IOException {
+        ReserveTicketController.reserveTrigger = false;
         navigateTo(event, "/com/trs/forms/ReserveTicket.fxml");
     }
 
